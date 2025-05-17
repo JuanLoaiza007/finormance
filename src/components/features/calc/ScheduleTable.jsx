@@ -1,3 +1,4 @@
+// src/components/features/calc/ScheduleTable.jsx
 import {
   Table,
   TableBody,
@@ -14,10 +15,10 @@ export function ScheduleTable({ data, className }) {
       <Table className="w-full">
         <TableHeader>
           <TableRow>
-            <TableHead className={"font-bold"}>Período</TableHead>
-            <TableHead className={"font-bold"}>Balance</TableHead>
-            <TableHead className={"font-bold"}>Invertido</TableHead>
-            <TableHead className={"font-bold"}>Interés</TableHead>
+            <TableHead className="font-bold">#</TableHead>
+            <TableHead className="font-bold">Balance</TableHead>
+            <TableHead className="font-bold">Invertido</TableHead>
+            <TableHead className="font-bold">Interés Periodo</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -25,13 +26,16 @@ export function ScheduleTable({ data, className }) {
             <TableRow key={row.Period}>
               <TableCell>{row.Period}</TableCell>
               <TableCell>
+                {"$"}
                 {formatterToCOP.format(row.Balance.toFixed(2))}
               </TableCell>
               <TableCell>
+                {"$"}
                 {formatterToCOP.format(row.Invested.toFixed(2))}
               </TableCell>
               <TableCell>
-                {formatterToCOP.format(row.Interest.toFixed(2))}
+                {"$"}
+                {formatterToCOP.format(row.InterestPeriod.toFixed(2))}
               </TableCell>
             </TableRow>
           ))}

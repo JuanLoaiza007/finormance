@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { calculatorSchema } from "@/components/schemas/calculatorForm";
 import {
   Select,
@@ -19,8 +19,13 @@ export function CalculatorForm({
   hasSchedule,
   className,
 }) {
-  const inputClass = "bg-white rounded shadow";
+  const inputClass = "bg-white rounded shadow font-light text-xs py-0";
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    handleCalculate();
+    setErrors({});
+  }, [formData]);
 
   const handleCalculate = () => {
     const result = calculatorSchema.safeParse(formData);
@@ -38,7 +43,7 @@ export function CalculatorForm({
   };
 
   return (
-    <section className={"flex flex-col gap-4 " + (className || "")}>
+    <section className={"flex flex-col " + (className || "")}>
       <article className="flex flex-col">
         <div>Capital inicial</div>
         <Input
@@ -52,7 +57,7 @@ export function CalculatorForm({
         )}
       </article>
 
-      <article className="flex flex-wrap gap-4">
+      <article className="flex flex-wrap gap-2">
         <div className="flex-1 flex flex-col">
           <div>Tasa</div>
           <Input
@@ -139,7 +144,7 @@ export function CalculatorForm({
         )}
       </article>
 
-      <article className="flex flex-wrap gap-4">
+      <article className="flex flex-wrap gap-2">
         <div className="flex-1 flex flex-col">
           <div>Períodos</div>
           <Input
@@ -192,8 +197,7 @@ export function CalculatorForm({
         )}
       </article>
 
-      <div className="flex justify-between">
-        <Button onClick={handleCalculate}>Calcular</Button>
+      <div className="flex justify-center">
         {hasSchedule && <Button onClick={onExport}>Exportar Excel</Button>}
       </div>
     </section>

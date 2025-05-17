@@ -49,13 +49,13 @@ export const calculatorSchema = z.object({
 });
 
 export const initialCalculatorData = {
-  initialCapital: "500000",
-  rateValue: "9.5",
+  initialCapital: "2000000",
+  rateValue: "9.25",
   rateType: "EA",
   nominalFreq: "12",
   extraContribution: "0",
   contributionTiming: "end",
-  baseAnnual: "360",
-  periods: "1",
-  granularity: "monthly",
+  baseAnnual: "365",
+  periods: "10",
+  granularity: "daily",
 };
