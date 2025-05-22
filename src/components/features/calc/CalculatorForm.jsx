@@ -9,17 +9,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 
 export function CalculatorForm({
   formData,
   onChangeField,
   onSubmit,
-  onExport,
-  hasSchedule,
   className,
 }) {
-  const inputClass = "bg-white rounded shadow font-light text-xs py-0";
+  const inputClass =
+    "text-black bg-white rounded shadow font-light text-xs py-0";
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -51,6 +49,7 @@ export function CalculatorForm({
           className={inputClass}
           value={formData.initialCapital}
           onChange={(e) => onChangeField("initialCapital", e.target.value)}
+          onWheel={(event) => event.currentTarget.blur()}
         />
         {errors.initialCapital && (
           <p className="text-xs text-red-600">{errors.initialCapital}</p>
@@ -65,6 +64,7 @@ export function CalculatorForm({
             className={inputClass}
             value={formData.rateValue}
             onChange={(e) => onChangeField("rateValue", e.target.value)}
+            onWheel={(event) => event.currentTarget.blur()}
           />
           {errors.rateValue && (
             <p className="text-xs text-red-600">{errors.rateValue}</p>
@@ -119,6 +119,7 @@ export function CalculatorForm({
           className={inputClass}
           value={formData.extraContribution}
           onChange={(e) => onChangeField("extraContribution", e.target.value)}
+          onWheel={(event) => event.currentTarget.blur()}
         />
         {errors.extraContribution && (
           <p className="text-xs text-red-600">{errors.extraContribution}</p>
@@ -152,6 +153,7 @@ export function CalculatorForm({
             className={inputClass}
             value={formData.periods}
             onChange={(e) => onChangeField("periods", e.target.value)}
+            onWheel={(event) => event.currentTarget.blur()}
           />
           {errors.periods && (
             <p className="text-xs text-red-600">{errors.periods}</p>
@@ -196,10 +198,6 @@ export function CalculatorForm({
           <p className="text-xs text-red-600">{errors.baseAnnual}</p>
         )}
       </article>
-
-      <div className="flex justify-center">
-        {hasSchedule && <Button onClick={onExport}>Exportar Excel</Button>}
-      </div>
     </section>
   );
 }

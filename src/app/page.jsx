@@ -15,6 +15,9 @@ import {
 } from "@/components/ui/table";
 import { formatterToCOP } from "@/util/number";
 import { APP_NAME } from "@/constants/appConstants";
+import { Card, CardContent } from "@/components/ui/card";
+import { ChartNoAxesColumn } from "lucide-react";
+import { ModeToggle } from "@/components/features/ModeToggle";
 
 export default function InvestmentCalculatorPage() {
   const [formData, setFormData] = useState(initialCalculatorData);
@@ -105,13 +108,14 @@ export default function InvestmentCalculatorPage() {
   const summary = schedule.length ? schedule[schedule.length - 1] : {};
 
   return (
-    <main className="flex flex-col w-full h-full lg:h-screen md:flex-row gap-4">
-      <section className="flex flex-col w-full md:max-w-1/3 pt-4 pb-8 rounded-bl-4xl rounded-br-4xl md:rounded-bl-none md:rounded-br-none px-8 md:p-8 gap-1 bg-purple-200">
-        <h2 className="text-xl font-bold text-center text-purple-700 md:pt-10">
-          {APP_NAME}
-        </h2>
+    <main className="flex flex-col w-full h-full lg:h-screen md:flex-row bg-white">
+      <section className="flex flex-col w-full md:max-w-1/3 lg:max-w-3/12 pb-8 rounded-bl-4xl rounded-br-4xl md:rounded-bl-none md:rounded-br-none px-8 gap-1 bg-primary">
+        <div className="w-full py-6 flex flex-row gap-2 select-none justify-center md:justify-start text-white">
+          <ChartNoAxesColumn className="[&_svg]:size-1 size-8"></ChartNoAxesColumn>
+          <h1 className="text-2xl font-bold ">{APP_NAME}</h1>
+        </div>
         <CalculatorForm
-          className="flex font-bold text-xs gap-2 py-0 my-0"
+          className="md:pt-4 flex font-bold text-xs gap-2 md:gap-4 text-white"
           formData={formData}
           onChangeField={onChangeField}
           onSubmit={handleCalculate}
@@ -120,50 +124,63 @@ export default function InvestmentCalculatorPage() {
         />
       </section>
 
-      <section className="w-full flex flex-col md:overflow-y-auto gap-4 px-4 pt-2 pb-4 md:p-8">
+      <section className="w-full flex flex-col bg-accent">
         {schedule.length > 0 && (
           <>
-            {/* Resumen */}
-            <Table className="w-full">
-              <TableHeader className="bg-purple-200">
-                <TableRow className="text-xs">
-                  <TableHead>Saldo Final</TableHead>
-                  <TableHead>Total invertido</TableHead>
-                  <TableHead>Ganancia</TableHead>
-                  <TableHead>Tasa</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow className="bg-purple-10 text-xs">
-                  <TableCell>
-                    {"$"}
-                    {formatterToCOP.format(summary.Balance.toFixed(2))}
-                  </TableCell>
-                  <TableCell>
-                    {"$"}
-                    {formatterToCOP.format(summary.Invested.toFixed(2))}
-                  </TableCell>
-                  <TableCell>
-                    {"$"}
-                    {formatterToCOP.format(
-                      summary.Balance.toFixed(2) - summary.Invested.toFixed(2)
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {formData.rateValue}% {formData.rateType}
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+            <div className="w-full flex  flex-row bg-white p-6 justify-between">
+              <h2 className="text-lg font-bold">Resumen</h2>
+              {/* <ModeToggle /> */}
+            </div>
+            <div className="w-full flex flex-col md:overflow-y-auto gap-2 md:gap-4 pt-2 pb-4 p-2 md:p-4">
+              {/* Resumen */}
+              <Card className="w-full">
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Saldo Final</TableHead>
+                        <TableHead>Total invertido</TableHead>
+                        <TableHead>Ganancia</TableHead>
+                        <TableHead>Tasa</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>
+                          {"$"}
+                          {formatterToCOP.format(summary.Balance.toFixed(2))}
+                        </TableCell>
+                        <TableCell>
+                          {"$"}
+                          {formatterToCOP.format(summary.Invested.toFixed(2))}
+                        </TableCell>
+                        <TableCell>
+                          {"$"}
+                          {formatterToCOP.format(
+                            summary.Balance.toFixed(2) -
+                              summary.Invested.toFixed(2)
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {formData.rateValue}% {formData.rateType}
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
 
-            {/* Gráfico */}
-            <BalanceChart data={schedule} />
+              {/* Gráfico */}
+              <div className="w-full flex flex-col lg:flex-row gap-2 md:gap-4">
+                <BalanceChart className="w-full" height={300} data={schedule} />
 
-            {/* Tabla detalle */}
-            <ScheduleTable
-              data={schedule}
-              className="flex text-xs md:text-sm"
-            />
+                {/* Tabla detalle */}
+                <ScheduleTable
+                  data={schedule}
+                  className="w-full flex text-xs md:text-sm"
+                />
+              </div>
+            </div>
           </>
         )}
       </section>

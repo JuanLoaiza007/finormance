@@ -8,8 +8,9 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { formatterToCOP } from "@/util/number";
+import { Card, CardContent } from "@/components/ui/card";
 
-export function BalanceChart({ data }) {
+export function BalanceChart({ data, className, width, height }) {
   if (!data || data.length === 0) return null;
 
   const balances = data.map((d) => d.Balance);
@@ -20,33 +21,41 @@ export function BalanceChart({ data }) {
   const yMax = max * 1.02;
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis
-          dataKey="Period"
-          tick={{ fontSize: 10 }}
-          label={{ value: "Período", position: "insideBottom", fontSize: 12 }}
-        />
-        <YAxis
-          domain={[yMin, yMax]}
-          tick={{ fontSize: 10 }}
-          tickFormatter={(value) => formatterToCOP.format(value)}
-        />
-        <Tooltip
-          formatter={(value) => formatterToCOP.format(value)}
-          labelFormatter={(label) => `Período ${label}`}
-          contentStyle={{ fontSize: 12 }}
-          itemStyle={{ fontSize: 12 }}
-        />
-        <Line
-          type="monotone"
-          dataKey="Balance"
-          stroke="#8884d8"
-          strokeWidth={2}
-          dot={false}
-        />
-      </LineChart>
-    </ResponsiveContainer>
+    <Card className={className}>
+      <CardContent className={"flex justify-center items-center my-auto"}>
+        <ResponsiveContainer width={width} height={height}>
+          <LineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="Period"
+              tick={{ fontSize: 10 }}
+              label={{
+                value: "Período",
+                position: "insideBottom",
+                fontSize: 12,
+              }}
+            />
+            <YAxis
+              domain={[yMin, yMax]}
+              tick={{ fontSize: 10 }}
+              tickFormatter={(value) => formatterToCOP.format(value)}
+            />
+            <Tooltip
+              formatter={(value) => formatterToCOP.format(value)}
+              labelFormatter={(label) => `Período ${label}`}
+              contentStyle={{ fontSize: 12 }}
+              itemStyle={{ fontSize: 12 }}
+            />
+            <Line
+              type="monotone"
+              dataKey="Balance"
+              stroke="#8884d8"
+              strokeWidth={2}
+              dot={false}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </CardContent>
+    </Card>
   );
 }

@@ -1,4 +1,5 @@
 // src/components/features/calc/ScheduleTable.jsx
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -11,36 +12,38 @@ import { formatterToCOP } from "@/util/number";
 
 export function ScheduleTable({ data, className }) {
   return (
-    <div className={"max-h-80 overflow-auto " + (className || "")}>
-      <Table className="w-full">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="font-bold">#</TableHead>
-            <TableHead className="font-bold">Balance</TableHead>
-            <TableHead className="font-bold">Invertido</TableHead>
-            <TableHead className="font-bold">Interés Periodo</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.map((row) => (
-            <TableRow key={row.Period}>
-              <TableCell>{row.Period}</TableCell>
-              <TableCell>
-                {"$"}
-                {formatterToCOP.format(row.Balance.toFixed(2))}
-              </TableCell>
-              <TableCell>
-                {"$"}
-                {formatterToCOP.format(row.Invested.toFixed(2))}
-              </TableCell>
-              <TableCell>
-                {"$"}
-                {formatterToCOP.format(row.InterestPeriod.toFixed(2))}
-              </TableCell>
+    <Card className={"" + (className || "")}>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>#</TableHead>
+              <TableHead>Balance</TableHead>
+              <TableHead>Invertido</TableHead>
+              <TableHead>Interés Periodo</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+          </TableHeader>
+          <TableBody>
+            {data.map((row) => (
+              <TableRow key={row.Period}>
+                <TableCell>{row.Period}</TableCell>
+                <TableCell>
+                  {"$"}
+                  {formatterToCOP.format(row.Balance.toFixed(2))}
+                </TableCell>
+                <TableCell>
+                  {"$"}
+                  {formatterToCOP.format(row.Invested.toFixed(2))}
+                </TableCell>
+                <TableCell>
+                  {"$"}
+                  {formatterToCOP.format(row.InterestPeriod.toFixed(2))}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
   );
 }
