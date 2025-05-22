@@ -5,19 +5,10 @@ import { CalculatorForm } from "@/components/features/calc/CalculatorForm";
 import { BalanceChart } from "@/components/features/calc/BalanceChart";
 import { ScheduleTable } from "@/components/features/calc/ScheduleTable";
 import { initialCalculatorData } from "@/components/schemas/calculatorForm";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { formatterToCOP } from "@/util/number";
 import { APP_NAME } from "@/constants/appConstants";
-import { Card, CardContent } from "@/components/ui/card";
 import { ChartNoAxesColumn } from "lucide-react";
-import { ModeToggle } from "@/components/features/ModeToggle";
+import UsageAdvice from "@/components/features/common/UsageAdvice";
+import SummarySection from "@/components/features/calc/SummarySection";
 
 export default function InvestmentCalculatorPage() {
   const [formData, setFormData] = useState(initialCalculatorData);
@@ -110,12 +101,12 @@ export default function InvestmentCalculatorPage() {
   return (
     <main className="flex flex-col w-full h-full lg:h-screen md:flex-row bg-white">
       <section className="flex flex-col w-full md:max-w-1/3 lg:max-w-3/12 pb-8 rounded-bl-4xl rounded-br-4xl md:rounded-bl-none md:rounded-br-none px-8 gap-1 bg-primary">
-        <div className="w-full py-6 flex flex-row gap-2 select-none justify-center md:justify-start text-white">
+        <div className="w-full py-6 flex flex-row gap-2 select-none justify-center md:justify-start text-background">
           <ChartNoAxesColumn className="[&_svg]:size-1 size-8"></ChartNoAxesColumn>
           <h1 className="text-2xl font-bold ">{APP_NAME}</h1>
         </div>
         <CalculatorForm
-          className="md:pt-4 flex font-bold text-xs gap-2 md:gap-4 text-white"
+          className="md:pt-4 flex font-bold text-xs gap-2 md:gap-4 text-background"
           formData={formData}
           onChangeField={onChangeField}
           onSubmit={handleCalculate}
@@ -133,42 +124,7 @@ export default function InvestmentCalculatorPage() {
             </div>
             <div className="w-full flex flex-col md:overflow-y-auto gap-2 md:gap-4 pt-2 pb-4 p-2 md:p-4">
               {/* Resumen */}
-              <Card className="w-full">
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Saldo Final</TableHead>
-                        <TableHead>Total invertido</TableHead>
-                        <TableHead>Ganancia</TableHead>
-                        <TableHead>Tasa</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>
-                          {"$"}
-                          {formatterToCOP.format(summary.Balance.toFixed(2))}
-                        </TableCell>
-                        <TableCell>
-                          {"$"}
-                          {formatterToCOP.format(summary.Invested.toFixed(2))}
-                        </TableCell>
-                        <TableCell>
-                          {"$"}
-                          {formatterToCOP.format(
-                            summary.Balance.toFixed(2) -
-                              summary.Invested.toFixed(2)
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {formData.rateValue}% {formData.rateType}
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
+              <SummarySection summary={summary} formData={formData} />
 
               <div className="w-full flex flex-col lg:flex-row gap-2 md:gap-4 max-h-[80%] overflow-hidden">
                 {/* Gráfico */}
@@ -184,6 +140,8 @@ export default function InvestmentCalculatorPage() {
           </>
         )}
       </section>
+
+      <UsageAdvice />
     </main>
   );
 }
