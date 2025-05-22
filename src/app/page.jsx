@@ -170,8 +170,8 @@ export default function InvestmentCalculatorPage() {
                 </CardContent>
               </Card>
 
-              {/* Gráfico */}
-              <div className="w-full flex flex-col lg:flex-row gap-2 md:gap-4">
+              <div className="w-full flex flex-col lg:flex-row gap-2 md:gap-4 max-h-[80%] overflow-hidden">
+                {/* Gráfico */}
                 <BalanceChart className="w-full" height={300} data={schedule} />
 
                 {/* Tabla detalle */}

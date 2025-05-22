@@ -12,7 +12,7 @@ import { formatterToCOP } from "@/util/number";
 
 export function ScheduleTable({ data, className }) {
   return (
-    <Card className={"" + (className || "")}>
+    <Card className={"max-h-100 overflow-y-auto " + (className || "")}>
       <CardContent>
         <Table>
           <TableHeader>
