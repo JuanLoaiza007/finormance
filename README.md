@@ -1,5 +1,7 @@
 # Finormance: Simulador de Rendimientos de Inversión
 
+![finormance-mockups](https://github.com/user-attachments/assets/880aed38-39f4-4a8f-8208-f8fa30050e4a)
+
 Finormance es un simulador interactivo de rendimientos de inversión creado para asistir a las personas en la visualización de cómo su capital podría incrementarse a lo largo del tiempo y basándose en diversos parámetros financieros. Esta aplicación es un recurso didáctico que facilita la experimentación con escenarios a medida y no debe usarse como herramienta definitiva de inversión.
 
 ## 🚀 Características
