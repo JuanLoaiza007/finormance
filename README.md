@@ -14,7 +14,7 @@ Finormance te permite:
 
 ## 🌐 Uso
 
-Para utilizar la aplicación accede a [https://finformance.vercel.app/](https://finformance.vercel.app/).
+Para utilizar la aplicación accede a [https://finormance.vercel.app/](https://finormance.vercel.app/).
 
 ## 🛠️ Primeros Pasos (Desarrollo)
 
