@@ -29,9 +29,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="es" className={OnestFont.className}>
       <body>
-        {/* <ThemeProvider> */}
-        {children}
-        {/* </ThemeProvider> */}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

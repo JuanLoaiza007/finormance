@@ -9,6 +9,7 @@ import { APP_NAME } from "@/constants/appConstants";
 import { ChartNoAxesColumn } from "lucide-react";
 import SummarySection from "@/components/features/calc/SummarySection";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ModeToggle } from "@/components/features/common/ModeToggle";
 
 export default function InvestmentCalculatorPage() {
   const [formData, setFormData] = useState(initialCalculatorData);
@@ -115,15 +116,19 @@ export default function InvestmentCalculatorPage() {
   const summary = schedule.length ? schedule[schedule.length - 1] : {};
 
   return (
-    <main className="flex flex-col w-full h-full md:h-screen md:flex-row bg-white">
+    <main className="flex flex-col w-full h-full md:h-screen md:flex-row bg-background">
       <section className="flex flex-col w-full md:max-w-1/3 lg:max-w-3/12 pb-8 rounded-bl-4xl rounded-br-4xl md:rounded-bl-none md:rounded-br-none px-10 md:px-6 gap-1 bg-primary h-full">
-        <div className="w-full pt-6 pb-2 md:pt-4 flex flex-row gap-2 select-none justify-center md:justify-start text-background">
-          <ChartNoAxesColumn className="[&_svg]:size-1 size-8"></ChartNoAxesColumn>
-          <h1 className="text-2xl font-bold ">{APP_NAME}</h1>
+        <div className="w-full pt-6 pb-2 md:pt-4 flex flex-row gap-2 select-none justify-between text-white">
+          <div></div>
+          <div className="flex items-center gap-2">
+            <ChartNoAxesColumn className="[&_svg]:size-1 size-8"></ChartNoAxesColumn>
+            <h1 className="text-2xl font-bold">{APP_NAME}</h1>
+          </div>
+          <ModeToggle />
         </div>
         <div className="w-full h-full flex flex-col overflow-y-auto gap-2 md:gap-4">
           {loading ? (
-            <div className="md:pt-4 flex flex-col font-bold text-xs gap-2 md:gap-4 text-background">
+            <div className="md:pt-4 flex flex-col font-bold text-xs gap-2 md:gap-4 text-white">
               <article className="flex flex-col">
                 <Skeleton className="h-10 w-full" />
               </article>
@@ -147,7 +152,7 @@ export default function InvestmentCalculatorPage() {
             </div>
           ) : (
             <CalculatorForm
-              className="md:pt-4 flex font-bold text-xs gap-1 md:gap-2 text-background"
+              className="md:pt-4 flex font-bold text-xs gap-1 md:gap-2 text-white"
               formData={formData}
               onChangeField={onChangeField}
               onSubmit={handleCalculate}
@@ -158,7 +163,7 @@ export default function InvestmentCalculatorPage() {
         </div>
       </section>
 
-      <section className="w-full flex flex-col  bg-accent overflow-hidden">
+      <section className="w-full flex flex-col bg-muted overflow-hidden">
         {loading ? (
           <div className="w-full h-full overflow-y-auto">
             <div className="w-full flex flex-col overflow-y-auto gap-2 md:gap-4 pt-2 pb-4 p-2 md:p-4">
@@ -185,7 +190,7 @@ export default function InvestmentCalculatorPage() {
         ) : (
           schedule.length > 0 && (
             <>
-              <div className="w-full flex  flex-row bg-white p-4 justify-between">
+              <div className="w-full flex  flex-row bg-background p-4 justify-between">
                 <h2 className="text-lg font-bold">Resumen</h2>
                 {/* <ModeToggle /> */}
               </div>
@@ -208,7 +213,7 @@ export default function InvestmentCalculatorPage() {
                       className="w-full flex text-xs md:text-sm"
                     />
                   </div>
-                  <p className="text-xs text-gray-500 mt-4 text-center max-w-xl">
+                  <p className="text-xs text-muted-foreground mt-4 text-center max-w-xl">
                     Esta aplicación es un simulador. Los resultados no
                     representan garantías de rendimiento real y no deben
                     considerarse asesoría financiera. Úsala como una herramienta

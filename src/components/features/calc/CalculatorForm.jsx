@@ -17,7 +17,7 @@ export function CalculatorForm({
   className,
 }) {
   const inputClass =
-    "text-black bg-white rounded shadow font-light text-xs py-0";
+    "text-foreground bg-muted rounded shadow font-light text-xs py-0";
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export function CalculatorForm({
           onWheel={(event) => event.currentTarget.blur()}
         />
         {errors.initialCapital && (
-          <p className="text-xs text-red-600">{errors.initialCapital}</p>
+          <p className="text-xs text-destructive">{errors.initialCapital}</p>
         )}
       </article>
 
@@ -67,7 +67,7 @@ export function CalculatorForm({
             onWheel={(event) => event.currentTarget.blur()}
           />
           {errors.rateValue && (
-            <p className="text-xs text-red-600">{errors.rateValue}</p>
+            <p className="text-xs text-destructive">{errors.rateValue}</p>
           )}
         </div>
 
@@ -86,7 +86,7 @@ export function CalculatorForm({
             </SelectContent>
           </Select>
           {errors.rateType && (
-            <p className="text-xs text-red-600">{errors.rateType}</p>
+            <p className="text-xs text-destructive">{errors.rateType}</p>
           )}
         </div>
       </article>
@@ -107,7 +107,7 @@ export function CalculatorForm({
             </SelectContent>
           </Select>
           {errors.nominalFreq && (
-            <p className="text-xs text-red-600">{errors.nominalFreq}</p>
+            <p className="text-xs text-destructive">{errors.nominalFreq}</p>
           )}
         </article>
       )}
@@ -122,7 +122,7 @@ export function CalculatorForm({
           onWheel={(event) => event.currentTarget.blur()}
         />
         {errors.extraContribution && (
-          <p className="text-xs text-red-600">{errors.extraContribution}</p>
+          <p className="text-xs text-destructive">{errors.extraContribution}</p>
         )}
       </article>
 
@@ -141,7 +141,9 @@ export function CalculatorForm({
           </SelectContent>
         </Select>
         {errors.contributionTiming && (
-          <p className="text-xs text-red-600">{errors.contributionTiming}</p>
+          <p className="text-xs text-destructive">
+            {errors.contributionTiming}
+          </p>
         )}
       </article>
 
@@ -156,7 +158,7 @@ export function CalculatorForm({
             onWheel={(event) => event.currentTarget.blur()}
           />
           {errors.periods && (
-            <p className="text-xs text-red-600">{errors.periods}</p>
+            <p className="text-xs text-destructive">{errors.periods}</p>
           )}
         </div>
 
@@ -175,7 +177,7 @@ export function CalculatorForm({
             </SelectContent>
           </Select>
           {errors.granularity && (
-            <p className="text-xs text-red-600">{errors.granularity}</p>
+            <p className="text-xs text-destructive">{errors.granularity}</p>
           )}
         </div>
       </article>
