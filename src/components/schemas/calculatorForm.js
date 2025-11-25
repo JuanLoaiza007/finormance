@@ -41,7 +41,7 @@ export const calculatorSchema = z.object({
 
 export const initialCalculatorData = {
   initialCapital: "2000000",
-  rateValue: "9.25",
+  rateValue: "8.25",
   rateType: "EA",
   nominalFreq: "12",
   extraContribution: "0",

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import { CalculatorForm } from "@/components/features/calc/CalculatorForm";
 import { BalanceChart } from "@/components/features/calc/BalanceChart";
@@ -14,8 +14,24 @@ export default function InvestmentCalculatorPage() {
   const [formData, setFormData] = useState(initialCalculatorData);
   const [schedule, setSchedule] = useState([]);
 
+  useEffect(() => {
+    const saved = localStorage.getItem("finormance-form-data");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        setFormData(parsed);
+      } catch (e) {
+        console.error("Error parsing saved form data", e);
+      }
+    }
+  }, []);
+
   const onChangeField = (field, value) =>
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormData((prev) => {
+      const newData = { ...prev, [field]: value };
+      localStorage.setItem("finormance-form-data", JSON.stringify(newData));
+      return newData;
+    });
 
   const parseNumber = (v) => {
     const n = parseFloat(v);
