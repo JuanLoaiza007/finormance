@@ -9,10 +9,12 @@ import { APP_NAME } from "@/constants/appConstants";
 import { ChartNoAxesColumn } from "lucide-react";
 import UsageAdvice from "@/components/features/common/UsageAdvice";
 import SummarySection from "@/components/features/calc/SummarySection";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function InvestmentCalculatorPage() {
   const [formData, setFormData] = useState(initialCalculatorData);
   const [schedule, setSchedule] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const saved = localStorage.getItem("finormance-form-data");
@@ -24,6 +26,7 @@ export default function InvestmentCalculatorPage() {
         console.error("Error parsing saved form data", e);
       }
     }
+    setLoading(false);
   }, []);
 
   const onChangeField = (field, value) =>
@@ -120,46 +123,96 @@ export default function InvestmentCalculatorPage() {
           <h1 className="text-2xl font-bold ">{APP_NAME}</h1>
         </div>
         <div className="w-full h-full flex flex-col overflow-y-auto gap-2 md:gap-4">
-          <CalculatorForm
-            className="md:pt-4 flex font-bold text-xs gap-1 md:gap-2 text-background"
-            formData={formData}
-            onChangeField={onChangeField}
-            onSubmit={handleCalculate}
-            onExport={handleExport}
-            hasSchedule={schedule.length > 0}
-          />
+          {loading ? (
+            <div className="md:pt-4 flex flex-col font-bold text-xs gap-2 md:gap-4 text-background">
+              <article className="flex flex-col">
+                <Skeleton className="h-10 w-full" />
+              </article>
+              <article className="flex flex-wrap gap-2">
+                <Skeleton className="h-10 flex-1" />
+                <Skeleton className="h-10 flex-1" />
+              </article>
+              <article className="flex flex-col">
+                <Skeleton className="h-10 w-full" />
+              </article>
+              <article className="flex flex-col">
+                <Skeleton className="h-10 w-full" />
+              </article>
+              <article className="flex flex-col">
+                <Skeleton className="h-10 w-full" />
+              </article>
+              <article className="flex flex-wrap gap-2">
+                <Skeleton className="h-10 flex-1" />
+                <Skeleton className="h-10 flex-1" />
+              </article>
+            </div>
+          ) : (
+            <CalculatorForm
+              className="md:pt-4 flex font-bold text-xs gap-1 md:gap-2 text-background"
+              formData={formData}
+              onChangeField={onChangeField}
+              onSubmit={handleCalculate}
+              onExport={handleExport}
+              hasSchedule={schedule.length > 0}
+            />
+          )}
         </div>
       </section>
 
       <section className="w-full flex flex-col  bg-accent overflow-hidden">
-        {schedule.length > 0 && (
-          <>
-            <div className="w-full flex  flex-row bg-white p-4 justify-between">
-              <h2 className="text-lg font-bold">Resumen</h2>
-              {/* <ModeToggle /> */}
-            </div>
-            <div className="w-full h-full overflow-y-auto">
-              <div className="w-full flex flex-col overflow-y-auto gap-2 md:gap-4 pt-2 pb-4 p-2 md:p-4">
-                {/* Resumen */}
-                <SummarySection summary={summary} formData={formData} />
-
-                <div className="w-full flex flex-col lg:flex-row gap-2 md:gap-4 max-h-[80%] overflow-hidden">
-                  {/* Gráfico */}
-                  <BalanceChart
-                    className="w-full"
-                    height={300}
-                    data={schedule}
-                  />
-
-                  {/* Tabla detalle */}
-                  <ScheduleTable
-                    data={schedule}
-                    className="w-full flex text-xs md:text-sm"
-                  />
+        {loading ? (
+          <div className="w-full h-full overflow-y-auto">
+            <div className="w-full flex flex-col overflow-y-auto gap-2 md:gap-4 pt-2 pb-4 p-2 md:p-4">
+              {/* Skeleton for Summary */}
+              <div className="w-full">
+                <Skeleton className="h-8 w-32 mb-4" />
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <Skeleton className="h-16 w-full" />
+                  <Skeleton className="h-16 w-full" />
+                  <Skeleton className="h-16 w-full" />
+                  <Skeleton className="h-16 w-full" />
                 </div>
               </div>
+
+              <div className="w-full flex flex-col lg:flex-row gap-2 md:gap-4 max-h-[80%] overflow-hidden">
+                {/* Skeleton for Chart */}
+                <Skeleton className="w-full h-64" />
+
+                {/* Skeleton for Table */}
+                <Skeleton className="w-full h-64" />
+              </div>
             </div>
-          </>
+          </div>
+        ) : (
+          schedule.length > 0 && (
+            <>
+              <div className="w-full flex  flex-row bg-white p-4 justify-between">
+                <h2 className="text-lg font-bold">Resumen</h2>
+                {/* <ModeToggle /> */}
+              </div>
+              <div className="w-full h-full overflow-y-auto">
+                <div className="w-full flex flex-col overflow-y-auto gap-2 md:gap-4 pt-2 pb-4 p-2 md:p-4">
+                  {/* Resumen */}
+                  <SummarySection summary={summary} formData={formData} />
+
+                  <div className="w-full flex flex-col lg:flex-row gap-2 md:gap-4 max-h-[80%] overflow-hidden">
+                    {/* Gráfico */}
+                    <BalanceChart
+                      className="w-full"
+                      height={300}
+                      data={schedule}
+                    />
+
+                    {/* Tabla detalle */}
+                    <ScheduleTable
+                      data={schedule}
+                      className="w-full flex text-xs md:text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+            </>
+          )
         )}
       </section>
 
