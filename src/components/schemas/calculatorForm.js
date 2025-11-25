@@ -46,6 +46,6 @@ export const initialCalculatorData = {
   nominalFreq: "12",
   extraContribution: "0",
   contributionTiming: "end",
-  periods: "10",
+  periods: "30",
   granularity: "daily",
 };

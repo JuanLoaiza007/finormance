@@ -103,14 +103,16 @@ export default function InvestmentCalculatorPage() {
           <ChartNoAxesColumn className="[&_svg]:size-1 size-8"></ChartNoAxesColumn>
           <h1 className="text-2xl font-bold ">{APP_NAME}</h1>
         </div>
-        <CalculatorForm
-          className="md:pt-4 flex font-bold text-xs gap-1 md:gap-2 text-background"
-          formData={formData}
-          onChangeField={onChangeField}
-          onSubmit={handleCalculate}
-          onExport={handleExport}
-          hasSchedule={schedule.length > 0}
-        />
+        <div className="w-full h-full flex flex-col overflow-y-auto gap-2 md:gap-4">
+          <CalculatorForm
+            className="md:pt-4 flex font-bold text-xs gap-1 md:gap-2 text-background"
+            formData={formData}
+            onChangeField={onChangeField}
+            onSubmit={handleCalculate}
+            onExport={handleExport}
+            hasSchedule={schedule.length > 0}
+          />
+        </div>
       </section>
 
       <section className="w-full flex flex-col  bg-accent overflow-hidden">
