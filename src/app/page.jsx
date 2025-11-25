@@ -35,8 +35,6 @@ export default function InvestmentCalculatorPage() {
       extraContribution,
       periods,
       rateType,
-      baseAnnual,
-      granulari,
       granularity,
       contributionTiming,
     } = parsed;
@@ -46,7 +44,7 @@ export default function InvestmentCalculatorPage() {
     const extra = parseNumber(extraContribution);
     const per = parseInt(periods) || 0;
     const freq = parseInt(nominalFreq) || 1;
-    const base = parseInt(baseAnnual) || 360;
+    const base = 365;
 
     const tea = computeEffectiveAnnual(rate, rateType, freq);
     const dailyRate = Math.pow(1 + tea, 1 / base) - 1;
@@ -99,14 +97,14 @@ export default function InvestmentCalculatorPage() {
   const summary = schedule.length ? schedule[schedule.length - 1] : {};
 
   return (
-    <main className="flex flex-col w-full h-full lg:h-screen md:flex-row bg-white">
-      <section className="flex flex-col w-full md:max-w-1/3 lg:max-w-3/12 pb-8 rounded-bl-4xl rounded-br-4xl md:rounded-bl-none md:rounded-br-none px-8 gap-1 bg-primary">
-        <div className="w-full py-6 flex flex-row gap-2 select-none justify-center md:justify-start text-background">
+    <main className="flex flex-col w-full h-full md:h-screen md:flex-row bg-white">
+      <section className="flex flex-col w-full md:max-w-1/3 lg:max-w-3/12 pb-8 rounded-bl-4xl rounded-br-4xl md:rounded-bl-none md:rounded-br-none px-10 md:px-6 gap-1 bg-primary h-full">
+        <div className="w-full pt-6 pb-2 md:pt-4 flex flex-row gap-2 select-none justify-center md:justify-start text-background">
           <ChartNoAxesColumn className="[&_svg]:size-1 size-8"></ChartNoAxesColumn>
           <h1 className="text-2xl font-bold ">{APP_NAME}</h1>
         </div>
         <CalculatorForm
-          className="md:pt-4 flex font-bold text-xs gap-2 md:gap-4 text-background"
+          className="md:pt-4 flex font-bold text-xs gap-1 md:gap-2 text-background"
           formData={formData}
           onChangeField={onChangeField}
           onSubmit={handleCalculate}
@@ -115,26 +113,32 @@ export default function InvestmentCalculatorPage() {
         />
       </section>
 
-      <section className="w-full flex flex-col bg-accent">
+      <section className="w-full flex flex-col  bg-accent overflow-hidden">
         {schedule.length > 0 && (
           <>
-            <div className="w-full flex  flex-row bg-white p-6 justify-between">
+            <div className="w-full flex  flex-row bg-white p-4 justify-between">
               <h2 className="text-lg font-bold">Resumen</h2>
               {/* <ModeToggle /> */}
             </div>
-            <div className="w-full flex flex-col md:overflow-y-auto gap-2 md:gap-4 pt-2 pb-4 p-2 md:p-4">
-              {/* Resumen */}
-              <SummarySection summary={summary} formData={formData} />
+            <div className="w-full h-full overflow-y-auto">
+              <div className="w-full flex flex-col overflow-y-auto gap-2 md:gap-4 pt-2 pb-4 p-2 md:p-4">
+                {/* Resumen */}
+                <SummarySection summary={summary} formData={formData} />
 
-              <div className="w-full flex flex-col lg:flex-row gap-2 md:gap-4 max-h-[80%] overflow-hidden">
-                {/* Gráfico */}
-                <BalanceChart className="w-full" height={300} data={schedule} />
+                <div className="w-full flex flex-col lg:flex-row gap-2 md:gap-4 max-h-[80%] overflow-hidden">
+                  {/* Gráfico */}
+                  <BalanceChart
+                    className="w-full"
+                    height={300}
+                    data={schedule}
+                  />
 
-                {/* Tabla detalle */}
-                <ScheduleTable
-                  data={schedule}
-                  className="w-full flex text-xs md:text-sm"
-                />
+                  {/* Tabla detalle */}
+                  <ScheduleTable
+                    data={schedule}
+                    className="w-full flex text-xs md:text-sm"
+                  />
+                </div>
               </div>
             </div>
           </>

@@ -27,15 +27,6 @@ export const calculatorSchema = z.object({
   contributionTiming: z.enum(["start", "end"], {
     errorMap: () => ({ message: "Momento inválido" }),
   }),
-  baseAnnual: z.preprocess(
-    (val) => (typeof val === "string" ? parseInt(val) : val),
-    z
-      .number()
-      .int()
-      .refine((n) => n === 360 || n === 365, {
-        message: "Base anual debe ser 360 o 365",
-      })
-  ),
   periods: z.preprocess(
     (val) => (typeof val === "string" ? parseInt(val) : val),
     z
@@ -55,7 +46,6 @@ export const initialCalculatorData = {
   nominalFreq: "12",
   extraContribution: "0",
   contributionTiming: "end",
-  baseAnnual: "365",
   periods: "10",
   granularity: "daily",
 };

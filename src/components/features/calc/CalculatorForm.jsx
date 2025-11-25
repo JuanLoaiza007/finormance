@@ -179,25 +179,6 @@ export function CalculatorForm({
           )}
         </div>
       </article>
-
-      <article className="flex flex-col">
-        <div>Base anual</div>
-        <Select
-          onValueChange={(val) => onChangeField("baseAnnual", val)}
-          defaultValue={formData.baseAnnual}
-        >
-          <SelectTrigger className={inputClass + " w-full"}>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="360">360 días</SelectItem>
-            <SelectItem value="365">365 días</SelectItem>
-          </SelectContent>
-        </Select>
-        {errors.baseAnnual && (
-          <p className="text-xs text-red-600">{errors.baseAnnual}</p>
-        )}
-      </article>
     </section>
   );
 }
