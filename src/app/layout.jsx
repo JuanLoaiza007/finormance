@@ -12,6 +12,17 @@ const OnestFont = Onest({
 export const metadata = {
   title: "Finormance Simulator",
   description: "Simulate your financial performance",
+  manifest: "/manifest.json",
+  themeColor: "#000000",
+  viewport: "width=device-width, initial-scale=1",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Finormance",
+  },
+  icons: {
+    apple: "/finormance.svg",
+  },
 };
 
 export default function RootLayout({ children }) {

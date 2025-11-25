@@ -7,7 +7,6 @@ import { ScheduleTable } from "@/components/features/calc/ScheduleTable";
 import { initialCalculatorData } from "@/components/schemas/calculatorForm";
 import { APP_NAME } from "@/constants/appConstants";
 import { ChartNoAxesColumn } from "lucide-react";
-import UsageAdvice from "@/components/features/common/UsageAdvice";
 import SummarySection from "@/components/features/calc/SummarySection";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -191,7 +190,7 @@ export default function InvestmentCalculatorPage() {
                 {/* <ModeToggle /> */}
               </div>
               <div className="w-full h-full overflow-y-auto">
-                <div className="w-full flex flex-col overflow-y-auto gap-2 md:gap-4 pt-2 pb-4 p-2 md:p-4">
+                <div className="w-full flex flex-col overflow-y-auto gap-2 md:gap-4 pt-2 pb-4 p-2 md:p-4 justify-center items-center">
                   {/* Resumen */}
                   <SummarySection summary={summary} formData={formData} />
 
@@ -209,14 +208,18 @@ export default function InvestmentCalculatorPage() {
                       className="w-full flex text-xs md:text-sm"
                     />
                   </div>
+                  <p className="text-xs text-gray-500 mt-4 text-center max-w-xl">
+                    Esta aplicación es un simulador. Los resultados no
+                    representan garantías de rendimiento real y no deben
+                    considerarse asesoría financiera. Úsala como una herramienta
+                    de apoyo para tomar decisiones informadas.
+                  </p>
                 </div>
               </div>
             </>
           )
         )}
       </section>
-
-      <UsageAdvice />
     </main>
   );
 }

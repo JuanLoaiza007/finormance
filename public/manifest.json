@@ -1,0 +1,16 @@
+{
+  "name": "Finormance",
+  "short_name": "Finormance",
+  "description": "Simulador de Rendimientos de Inversión",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/finormance.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
