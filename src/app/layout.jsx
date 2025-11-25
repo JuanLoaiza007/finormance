@@ -21,7 +21,7 @@ export const metadata = {
     title: "Finormance",
   },
   icons: {
-    apple: "/finormance.svg",
+    apple: "/favicon.svg",
   },
 };
 
