@@ -157,7 +157,7 @@ export function CalculatorForm({ className }) {
             </Select>
           </FormField>
 
-          <FormField label="Recargo mensual">
+          <FormField label="Recargo">
             <Input
               type="number"
               className={inputClass}
