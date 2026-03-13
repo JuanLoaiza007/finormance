@@ -124,7 +124,7 @@ export default function InvestmentCalculatorPage() {
       <section
         className={`relative flex flex-col ${UI_CONFIG.form.container} ${UI_CONFIG.form.shadow}`}
       >
-        <BlurredBackground />
+        <BlurredBackground location="form" />
         <div className="relative z-10 w-full pt-6 pb-2 md:pt-4 flex flex-row gap-4 select-none text-foreground items-start">
           <div className="flex flex-col flex-1">
             <div className="flex items-center gap-2">
@@ -192,7 +192,7 @@ export default function InvestmentCalculatorPage() {
       </section>
 
       <section className={`${UI_CONFIG.results.container}`}>
-        <BlurredBackground />
+        <BlurredBackground location="results" />
         {loading ? (
           <div className="w-full h-full overflow-y-auto relative z-10">
             <div className="w-full flex flex-col overflow-y-auto gap-4 md:gap-4 pt-4 pb-8 p-4 md:p-6">
