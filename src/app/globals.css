@@ -111,3 +111,23 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.541 0.281 293.009);
 }
+
+/* Transiciones suaves para cambios de tema */
+* {
+  transition:
+    background-color 0.3s ease-in-out,
+    border-color 0.3s ease-in-out,
+    color 0.3s ease-in-out,
+    fill 0.3s ease-in-out,
+    stroke 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out;
+}
+
+/* Efecto Glassmorphism global */
+.card,
+[data-slot="card"],
+nav,
+aside {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}

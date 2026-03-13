@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 
 export function CalculatorForm({
   formData,
@@ -17,7 +18,7 @@ export function CalculatorForm({
   className,
 }) {
   const inputClass =
-    "text-foreground bg-muted rounded shadow font-light text-xs py-0";
+    "text-foreground bg-background/50 dark:bg-background/20 backdrop-blur-sm border-border/50 rounded-[var(--radius)] shadow-sm font-medium text-sm py-2 h-10 transition-all focus:bg-background focus:ring-0 w-full flex items-center";
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -40,10 +41,23 @@ export function CalculatorForm({
     }
   };
 
+  const FormField = ({ label, error, children, className }) => (
+    <article className={cn("flex flex-col gap-1.5 min-w-0", className)}>
+      <div className="text-foreground/80 dark:text-muted-foreground font-semibold ml-1 truncate h-5 flex items-center">
+        {label}
+      </div>
+      <div className="h-10 flex items-center">{children}</div>
+      {error && (
+        <p className="text-[10px] font-medium text-destructive ml-1 leading-tight truncate h-4">
+          {error}
+        </p>
+      )}
+    </article>
+  );
+
   return (
-    <section className={"flex flex-col " + (className || "")}>
-      <article className="flex flex-col">
-        <div>Capital inicial</div>
+    <section className={cn("flex flex-col gap-4", className)}>
+      <FormField label="Capital inicial" error={errors.initialCapital}>
         <Input
           type="number"
           className={inputClass}
@@ -51,14 +65,10 @@ export function CalculatorForm({
           onChange={(e) => onChangeField("initialCapital", e.target.value)}
           onWheel={(event) => event.currentTarget.blur()}
         />
-        {errors.initialCapital && (
-          <p className="text-xs text-destructive">{errors.initialCapital}</p>
-        )}
-      </article>
+      </FormField>
 
-      <article className="flex flex-wrap gap-2">
-        <div className="flex-1 flex flex-col">
-          <div>Tasa</div>
+      <div className="grid grid-cols-2 gap-3">
+        <FormField label="Tasa" error={errors.rateValue}>
           <Input
             type="number"
             className={inputClass}
@@ -66,18 +76,14 @@ export function CalculatorForm({
             onChange={(e) => onChangeField("rateValue", e.target.value)}
             onWheel={(event) => event.currentTarget.blur()}
           />
-          {errors.rateValue && (
-            <p className="text-xs text-destructive">{errors.rateValue}</p>
-          )}
-        </div>
+        </FormField>
 
-        <div className="flex flex-col">
-          <div>Tipo de tasa</div>
+        <FormField label="Tipo de tasa" error={errors.rateType}>
           <Select
             onValueChange={(val) => onChangeField("rateType", val)}
             defaultValue={formData.rateType}
           >
-            <SelectTrigger className={inputClass + " w-full"}>
+            <SelectTrigger className={inputClass}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -85,20 +91,16 @@ export function CalculatorForm({
               <SelectItem value="NA">Nominal Anual</SelectItem>
             </SelectContent>
           </Select>
-          {errors.rateType && (
-            <p className="text-xs text-destructive">{errors.rateType}</p>
-          )}
-        </div>
-      </article>
+        </FormField>
+      </div>
 
       {formData.rateType === "NA" && (
-        <article className="flex flex-col">
-          <div>Frecuencia nominal</div>
+        <FormField label="Frecuencia nominal" error={errors.nominalFreq}>
           <Select
             onValueChange={(val) => onChangeField("nominalFreq", val)}
             defaultValue={formData.nominalFreq}
           >
-            <SelectTrigger className={inputClass + " w-full"}>
+            <SelectTrigger className={inputClass}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -106,14 +108,10 @@ export function CalculatorForm({
               <SelectItem value="360">Diaria</SelectItem>
             </SelectContent>
           </Select>
-          {errors.nominalFreq && (
-            <p className="text-xs text-destructive">{errors.nominalFreq}</p>
-          )}
-        </article>
+        </FormField>
       )}
 
-      <article className="flex flex-col">
-        <div>Recargo extra</div>
+      <FormField label="Recargo extra" error={errors.extraContribution}>
         <Input
           type="number"
           className={inputClass}
@@ -121,18 +119,14 @@ export function CalculatorForm({
           onChange={(e) => onChangeField("extraContribution", e.target.value)}
           onWheel={(event) => event.currentTarget.blur()}
         />
-        {errors.extraContribution && (
-          <p className="text-xs text-destructive">{errors.extraContribution}</p>
-        )}
-      </article>
+      </FormField>
 
-      <article className="flex flex-col">
-        <div>Momento de recargo</div>
+      <FormField label="Momento de recargo" error={errors.contributionTiming}>
         <Select
           onValueChange={(val) => onChangeField("contributionTiming", val)}
           defaultValue={formData.contributionTiming}
         >
-          <SelectTrigger className={inputClass + " w-full"}>
+          <SelectTrigger className={inputClass}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -140,16 +134,10 @@ export function CalculatorForm({
             <SelectItem value="end">Fin</SelectItem>
           </SelectContent>
         </Select>
-        {errors.contributionTiming && (
-          <p className="text-xs text-destructive">
-            {errors.contributionTiming}
-          </p>
-        )}
-      </article>
+      </FormField>
 
-      <article className="flex flex-wrap gap-2">
-        <div className="flex-1 flex flex-col">
-          <div>Períodos</div>
+      <div className="grid grid-cols-2 gap-3">
+        <FormField label="Períodos" error={errors.periods}>
           <Input
             type="number"
             className={inputClass}
@@ -157,18 +145,14 @@ export function CalculatorForm({
             onChange={(e) => onChangeField("periods", e.target.value)}
             onWheel={(event) => event.currentTarget.blur()}
           />
-          {errors.periods && (
-            <p className="text-xs text-destructive">{errors.periods}</p>
-          )}
-        </div>
+        </FormField>
 
-        <div className="flex flex-col">
-          <div>Granularidad</div>
+        <FormField label="Granularidad" error={errors.granularity}>
           <Select
             onValueChange={(val) => onChangeField("granularity", val)}
             defaultValue={formData.granularity}
           >
-            <SelectTrigger className={inputClass + " w-full"}>
+            <SelectTrigger className={inputClass}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -176,11 +160,8 @@ export function CalculatorForm({
               <SelectItem value="monthly">Mensual</SelectItem>
             </SelectContent>
           </Select>
-          {errors.granularity && (
-            <p className="text-xs text-destructive">{errors.granularity}</p>
-          )}
-        </div>
-      </article>
+        </FormField>
+      </div>
     </section>
   );
 }

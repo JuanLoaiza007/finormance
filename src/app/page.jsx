@@ -10,11 +10,15 @@ import { ChartNoAxesColumn } from "lucide-react";
 import SummarySection from "@/components/features/calc/SummarySection";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ModeToggle } from "@/components/features/common/ModeToggle";
+import { UI_CONFIG } from "@/lib/ui-config";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { BlurredBackground } from "@/components/features/common/BlurredBackground";
 
 export default function InvestmentCalculatorPage() {
   const [formData, setFormData] = useState(initialCalculatorData);
   const [schedule, setSchedule] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isFormExpanded, setIsFormExpanded] = useState(true);
 
   useEffect(() => {
     const saved = localStorage.getItem("finormance-form-data");
@@ -117,18 +121,42 @@ export default function InvestmentCalculatorPage() {
 
   return (
     <main className="flex flex-col w-full h-full md:h-screen md:flex-row bg-background">
-      <section className="flex flex-col w-full md:max-w-1/3 lg:max-w-3/12 pb-8 rounded-bl-4xl rounded-br-4xl md:rounded-bl-none md:rounded-br-none px-10 md:px-6 gap-1 bg-primary h-full">
-        <div className="w-full pt-6 pb-2 md:pt-4 flex flex-row gap-2 select-none justify-between text-white">
-          <div></div>
-          <div className="flex items-center gap-2">
-            <ChartNoAxesColumn className="[&_svg]:size-1 size-8"></ChartNoAxesColumn>
-            <h1 className="text-2xl font-bold">{APP_NAME}</h1>
+      <section
+        className={`relative flex flex-col w-full md:max-w-1/3 lg:max-w-3/12 pb-2 md:pb-8 rounded-bl-2xl rounded-br-2xl md:rounded-bl-none md:rounded-br-none px-6 md:px-6 gap-1 ${UI_CONFIG.form.background} h-full overflow-hidden border-r ${UI_CONFIG.form.border}`}
+      >
+        <BlurredBackground />
+        <div className="relative z-10 w-full pt-6 pb-2 md:pt-4 flex flex-row gap-4 select-none text-foreground items-start">
+          <div className="flex flex-col flex-1">
+            <div className="flex items-center gap-2">
+              <ChartNoAxesColumn className="[&_svg]:size-1 size-8 text-primary shrink-0"></ChartNoAxesColumn>
+              <h1 className="text-2xl font-bold leading-none">{APP_NAME}</h1>
+            </div>
+            <p className="text-[10px] uppercase tracking-wider font-bold text-foreground/70 mt-1">
+              Simulador de rendimientos
+            </p>
           </div>
-          <ModeToggle />
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => setIsFormExpanded(!isFormExpanded)}
+              className="md:hidden p-2 rounded-full hover:bg-primary/10 transition-colors text-primary"
+              aria-label={
+                isFormExpanded ? "Contraer formulario" : "Expandir formulario"
+              }
+            >
+              {isFormExpanded ? (
+                <ChevronUp size={20} />
+              ) : (
+                <ChevronDown size={20} />
+              )}
+            </button>
+            <ModeToggle />
+          </div>
         </div>
-        <div className="w-full h-full flex flex-col overflow-y-auto gap-2 md:gap-4">
+        <div
+          className={`relative z-10 w-full flex flex-col overflow-y-auto gap-2 md:gap-4 transition-[max-height,opacity,margin] duration-500 ease-in-out ${isFormExpanded ? "max-h-[2000px] opacity-100 mt-2" : "max-h-0 opacity-0 md:max-h-full md:opacity-100"}`}
+        >
           {loading ? (
-            <div className="md:pt-4 flex flex-col font-bold text-xs gap-2 md:gap-4 text-white">
+            <div className="md:pt-4 flex flex-col font-bold text-xs gap-2 md:gap-4 text-foreground">
               <article className="flex flex-col">
                 <Skeleton className="h-10 w-full" />
               </article>
@@ -152,7 +180,7 @@ export default function InvestmentCalculatorPage() {
             </div>
           ) : (
             <CalculatorForm
-              className="md:pt-4 flex font-bold text-xs gap-1 md:gap-2 text-white"
+              className="pb-3 flex font-bold text-xs gap-1 md:gap-2 text-foreground"
               formData={formData}
               onChangeField={onChangeField}
               onSubmit={handleCalculate}
@@ -163,10 +191,10 @@ export default function InvestmentCalculatorPage() {
         </div>
       </section>
 
-      <section className="w-full flex flex-col bg-muted overflow-hidden">
+      <section className="w-full flex flex-col bg-muted overflow-hidden relative">
         {loading ? (
           <div className="w-full h-full overflow-y-auto">
-            <div className="w-full flex flex-col overflow-y-auto gap-2 md:gap-4 pt-2 pb-4 p-2 md:p-4">
+            <div className="w-full flex flex-col overflow-y-auto gap-4 md:gap-4 pt-4 pb-8 p-4 md:p-6">
               {/* Skeleton for Summary */}
               <div className="w-full">
                 <Skeleton className="h-8 w-32 mb-4" />
@@ -178,7 +206,7 @@ export default function InvestmentCalculatorPage() {
                 </div>
               </div>
 
-              <div className="w-full flex flex-col lg:flex-row gap-2 md:gap-4 max-h-[80%] overflow-hidden">
+              <div className="w-full flex flex-col lg:flex-row gap-4 md:gap-6 max-h-[80%] overflow-hidden">
                 {/* Skeleton for Chart */}
                 <Skeleton className="w-full h-64" />
 
@@ -190,16 +218,16 @@ export default function InvestmentCalculatorPage() {
         ) : (
           schedule.length > 0 && (
             <>
-              <div className="w-full flex  flex-row bg-background p-4 justify-between">
+              <div className="w-full flex  flex-row bg-background p-4 md:p-6 justify-between border-b border-border/50">
                 <h2 className="text-lg font-bold">Resumen</h2>
                 {/* <ModeToggle /> */}
               </div>
               <div className="w-full h-full overflow-y-auto">
-                <div className="w-full flex flex-col overflow-y-auto gap-2 md:gap-4 pt-2 pb-4 p-2 md:p-4 justify-center items-center">
+                <div className="w-full flex flex-col overflow-y-auto gap-4 md:gap-6 p-4 pb-16 md:pb-6 md:p-6 justify-center items-center">
                   {/* Resumen */}
                   <SummarySection summary={summary} formData={formData} />
 
-                  <div className="w-full flex flex-col lg:flex-row gap-2 md:gap-4 max-h-[80%] overflow-hidden">
+                  <div className="w-full flex flex-col lg:flex-row gap-4 md:gap-6 max-h-[80%] overflow-hidden">
                     {/* Gráfico */}
                     <BalanceChart
                       className="w-full"
@@ -213,12 +241,6 @@ export default function InvestmentCalculatorPage() {
                       className="w-full flex text-xs md:text-sm"
                     />
                   </div>
-                  <p className="text-xs text-muted-foreground mt-4 text-center max-w-xl">
-                    Esta aplicación es un simulador. Los resultados no
-                    representan garantías de rendimiento real y no deben
-                    considerarse asesoría financiera. Úsala como una herramienta
-                    de apoyo para tomar decisiones informadas.
-                  </p>
                 </div>
               </div>
             </>

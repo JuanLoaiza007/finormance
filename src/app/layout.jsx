@@ -1,6 +1,7 @@
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Onest } from "next/font/google";
+import { BlurredBackground } from "@/components/features/common/BlurredBackground";
 
 const OnestFont = Onest({
   subsets: ["latin"],
@@ -11,10 +12,9 @@ const OnestFont = Onest({
 
 export const metadata = {
   title: "Finormance Simulator",
-  description: "Simulate your financial performance",
+  description:
+    "Simulate your financial performance, with a focus on your financial goals",
   manifest: "/manifest.json",
-  themeColor: "#000000",
-  viewport: "width=device-width, initial-scale=1",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -25,17 +25,32 @@ export const metadata = {
   },
 };
 
+export const viewport = {
+  themeColor: "#000000",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="es" className={OnestFont.className}>
-      <body>
+    <html lang="es" className={OnestFont.className} suppressHydrationWarning>
+      <body className="relative min-h-screen">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
-          disableTransitionOnChange
+          disableTransitionOnChange={false}
         >
+          <BlurredBackground />
           {children}
+          <footer className="fixed bottom-0 left-0 w-full bg-background/80 backdrop-blur-md border-t border-border/50 py-2 px-4 z-50">
+            <p className="text-[10px] md:text-xs text-muted-foreground text-center font-medium">
+              Los resultados no garantizan rendimientos reales ni sustituyen la
+              asesoría financiera profesional.
+            </p>
+          </footer>
         </ThemeProvider>
       </body>
     </html>
