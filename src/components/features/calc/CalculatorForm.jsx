@@ -10,23 +10,21 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useCalculator } from "@/context/CalculatorContext";
 
-export function CalculatorForm({
-  formData,
-  onChangeField,
-  onSubmit,
-  className,
-}) {
+export function CalculatorForm({ className }) {
+  const { formData, updateField } = useCalculator();
+
   const inputClass =
-    "text-foreground bg-background/50 dark:bg-background/20 backdrop-blur-sm border-border/50 rounded-[var(--radius)] shadow-sm font-medium text-sm py-2 h-10 transition-all focus:bg-background focus:ring-0 w-full flex items-center";
+    "text-foreground bg-background/60 backdrop-blur-sm border-border/50 rounded-[var(--radius)] shadow-sm font-medium text-sm py-2 h-10 transition-all focus:bg-background focus:ring-0 w-full flex items-center";
+  const labelClass =
+    "text-foreground/80 dark:text-muted-foreground font-semibold ml-1 truncate h-5 flex items-center";
+  const errorClass =
+    "text-[10px] font-medium text-destructive ml-1 leading-tight truncate h-4";
+
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    handleCalculate();
-    setErrors({});
-  }, [formData]);
-
-  const handleCalculate = () => {
     const result = calculatorSchema.safeParse(formData);
     if (!result.success) {
       const fieldErrors = {};
@@ -37,131 +35,173 @@ export function CalculatorForm({
       setErrors(fieldErrors);
     } else {
       setErrors({});
-      onSubmit(result.data);
     }
-  };
-
-  const FormField = ({ label, error, children, className }) => (
-    <article className={cn("flex flex-col gap-1.5 min-w-0", className)}>
-      <div className="text-foreground/80 dark:text-muted-foreground font-semibold ml-1 truncate h-5 flex items-center">
-        {label}
-      </div>
-      <div className="h-10 flex items-center">{children}</div>
-      {error && (
-        <p className="text-[10px] font-medium text-destructive ml-1 leading-tight truncate h-4">
-          {error}
-        </p>
-      )}
-    </article>
-  );
+  }, [formData]);
 
   return (
     <section className={cn("flex flex-col gap-4", className)}>
-      <FormField label="Capital inicial" error={errors.initialCapital}>
-        <Input
-          type="number"
-          className={inputClass}
-          value={formData.initialCapital}
-          onChange={(e) => onChangeField("initialCapital", e.target.value)}
-          onWheel={(event) => event.currentTarget.blur()}
-        />
-      </FormField>
+      <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+        {/* Capital inicial */}
+        <div className="flex flex-col gap-1.5 min-w-0">
+          <label className={labelClass}>Capital inicial</label>
+          <div className="h-10 flex items-center">
+            <Input
+              type="number"
+              className={inputClass}
+              value={formData.initialCapital}
+              onChange={(e) => updateField("initialCapital", e.target.value)}
+              onWheel={(event) => event.currentTarget.blur()}
+            />
+          </div>
+          {errors.initialCapital && (
+            <p className={errorClass}>{errors.initialCapital}</p>
+          )}
+        </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <FormField label="Tasa" error={errors.rateValue}>
-          <Input
-            type="number"
-            className={inputClass}
-            value={formData.rateValue}
-            onChange={(e) => onChangeField("rateValue", e.target.value)}
-            onWheel={(event) => event.currentTarget.blur()}
-          />
-        </FormField>
+        <div className="grid grid-cols-2 gap-3">
+          {/* Tasa */}
+          <div className="flex flex-col gap-1.5 min-w-0">
+            <label className={labelClass}>Tasa</label>
+            <div className="h-10 flex items-center">
+              <Input
+                type="number"
+                className={inputClass}
+                value={formData.rateValue}
+                onChange={(e) => updateField("rateValue", e.target.value)}
+                onWheel={(event) => event.currentTarget.blur()}
+              />
+            </div>
+            {errors.rateValue && (
+              <p className={errorClass}>{errors.rateValue}</p>
+            )}
+          </div>
 
-        <FormField label="Tipo de tasa" error={errors.rateType}>
-          <Select
-            onValueChange={(val) => onChangeField("rateType", val)}
-            defaultValue={formData.rateType}
-          >
-            <SelectTrigger className={inputClass}>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="EA">Efectivo Anual</SelectItem>
-              <SelectItem value="NA">Nominal Anual</SelectItem>
-            </SelectContent>
-          </Select>
-        </FormField>
-      </div>
+          {/* Tipo de tasa */}
+          <div className="flex flex-col gap-1.5 min-w-0">
+            <label className={labelClass}>Tipo de tasa</label>
+            <div className="h-10 flex items-center">
+              <Select
+                onValueChange={(val) => updateField("rateType", val)}
+                defaultValue={formData.rateType}
+              >
+                <SelectTrigger className={inputClass}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="EA">Efectivo Anual</SelectItem>
+                  <SelectItem value="NA">Nominal Anual</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {errors.rateType && <p className={errorClass}>{errors.rateType}</p>}
+          </div>
+        </div>
 
-      {formData.rateType === "NA" && (
-        <FormField label="Frecuencia nominal" error={errors.nominalFreq}>
-          <Select
-            onValueChange={(val) => onChangeField("nominalFreq", val)}
-            defaultValue={formData.nominalFreq}
-          >
-            <SelectTrigger className={inputClass}>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="12">Mensual</SelectItem>
-              <SelectItem value="360">Diaria</SelectItem>
-            </SelectContent>
-          </Select>
-        </FormField>
-      )}
+        {/* Frecuencia nominal */}
+        {formData.rateType === "NA" && (
+          <div className="flex flex-col gap-1.5 min-w-0">
+            <label className={labelClass}>Frecuencia nominal</label>
+            <div className="h-10 flex items-center">
+              <Select
+                onValueChange={(val) => updateField("nominalFreq", val)}
+                defaultValue={formData.nominalFreq}
+              >
+                <SelectTrigger className={inputClass}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="12">Mensual</SelectItem>
+                  <SelectItem value="360">Diaria</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {errors.nominalFreq && (
+              <p className={errorClass}>{errors.nominalFreq}</p>
+            )}
+          </div>
+        )}
 
-      <FormField label="Recargo extra" error={errors.extraContribution}>
-        <Input
-          type="number"
-          className={inputClass}
-          value={formData.extraContribution}
-          onChange={(e) => onChangeField("extraContribution", e.target.value)}
-          onWheel={(event) => event.currentTarget.blur()}
-        />
-      </FormField>
+        {/* Recargo extra */}
+        <div className="flex flex-col gap-1.5 min-w-0">
+          <label className={labelClass}>Recargo extra</label>
+          <div className="h-10 flex items-center">
+            <Input
+              type="number"
+              className={inputClass}
+              placeholder="0"
+              value={formData.extraContribution}
+              onChange={(e) => updateField("extraContribution", e.target.value)}
+              onWheel={(event) => event.currentTarget.blur()}
+            />
+          </div>
+          {errors.extraContribution && (
+            <p className={errorClass}>{errors.extraContribution}</p>
+          )}
+        </div>
 
-      <FormField label="Momento de recargo" error={errors.contributionTiming}>
-        <Select
-          onValueChange={(val) => onChangeField("contributionTiming", val)}
-          defaultValue={formData.contributionTiming}
-        >
-          <SelectTrigger className={inputClass}>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="start">Inicio</SelectItem>
-            <SelectItem value="end">Fin</SelectItem>
-          </SelectContent>
-        </Select>
-      </FormField>
+        {/* Momento de recargo */}
+        {formData.extraContribution && formData.extraContribution !== "0" && (
+          <div className="flex flex-col gap-1.5 min-w-0">
+            <label className={labelClass}>Momento de recargo</label>
+            <div className="h-10 flex items-center">
+              <Select
+                onValueChange={(val) => updateField("contributionTiming", val)}
+                defaultValue={formData.contributionTiming}
+              >
+                <SelectTrigger className={inputClass}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="start">Inicio</SelectItem>
+                  <SelectItem value="end">Fin</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {errors.contributionTiming && (
+              <p className={errorClass}>{errors.contributionTiming}</p>
+            )}
+          </div>
+        )}
 
-      <div className="grid grid-cols-2 gap-3">
-        <FormField label="Períodos" error={errors.periods}>
-          <Input
-            type="number"
-            className={inputClass}
-            value={formData.periods}
-            onChange={(e) => onChangeField("periods", e.target.value)}
-            onWheel={(event) => event.currentTarget.blur()}
-          />
-        </FormField>
+        <div className="grid grid-cols-2 gap-3">
+          {/* Períodos */}
+          <div className="flex flex-col gap-1.5 min-w-0">
+            <label className={labelClass}>Períodos</label>
+            <div className="h-10 flex items-center">
+              <Input
+                type="number"
+                className={inputClass}
+                value={formData.periods}
+                onChange={(e) => updateField("periods", e.target.value)}
+                onWheel={(event) => event.currentTarget.blur()}
+              />
+            </div>
+            {errors.periods && <p className={errorClass}>{errors.periods}</p>}
+          </div>
 
-        <FormField label="Granularidad" error={errors.granularity}>
-          <Select
-            onValueChange={(val) => onChangeField("granularity", val)}
-            defaultValue={formData.granularity}
-          >
-            <SelectTrigger className={inputClass}>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="daily">Diaria</SelectItem>
-              <SelectItem value="monthly">Mensual</SelectItem>
-            </SelectContent>
-          </Select>
-        </FormField>
-      </div>
+          {/* Granularidad */}
+          <div className="flex flex-col gap-1.5 min-w-0">
+            <label className={labelClass}>Granularidad</label>
+            <div className="h-10 flex items-center">
+              <Select
+                onValueChange={(val) => updateField("granularity", val)}
+                defaultValue={formData.granularity}
+              >
+                <SelectTrigger className={inputClass}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="daily">Diaria</SelectItem>
+                  <SelectItem value="monthly">Mensual</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {errors.granularity && (
+              <p className={errorClass}>{errors.granularity}</p>
+            )}
+          </div>
+        </div>
+      </form>
     </section>
   );
 }

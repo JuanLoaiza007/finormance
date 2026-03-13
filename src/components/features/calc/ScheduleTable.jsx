@@ -10,7 +10,10 @@ import {
 } from "@/components/ui/table";
 import { formatterToCOP } from "@/util/number";
 
-export function ScheduleTable({ data, className }) {
+export function ScheduleTable({ data, className, formData }) {
+  const showInvestedColumn =
+    formData.extraContribution && formData.extraContribution !== "0";
+
   return (
     <Card className={"max-h-100 overflow-y-auto " + (className || "")}>
       <CardContent>
@@ -19,7 +22,7 @@ export function ScheduleTable({ data, className }) {
             <TableRow>
               <TableHead>#</TableHead>
               <TableHead>Balance</TableHead>
-              <TableHead>Invertido</TableHead>
+              {showInvestedColumn && <TableHead>Invertido</TableHead>}
               <TableHead>Interés Periodo</TableHead>
             </TableRow>
           </TableHeader>
@@ -31,10 +34,12 @@ export function ScheduleTable({ data, className }) {
                   {"$"}
                   {formatterToCOP.format(row.Balance.toFixed(2))}
                 </TableCell>
-                <TableCell>
-                  {"$"}
-                  {formatterToCOP.format(row.Invested.toFixed(2))}
-                </TableCell>
+                {showInvestedColumn && (
+                  <TableCell>
+                    {"$"}
+                    {formatterToCOP.format(row.Invested.toFixed(2))}
+                  </TableCell>
+                )}
                 <TableCell>
                   {"$"}
                   {formatterToCOP.format(row.InterestPeriod.toFixed(2))}
