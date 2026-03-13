@@ -1,13 +1,14 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
+import { UI_CONFIG } from "@/lib/ui-config";
 
 function Card({ className, ...props }) {
   return (
     <div
       data-slot="card"
       className={cn(
-        "bg-card/60 dark:bg-card/40 backdrop-blur-md text-card-foreground flex flex-col gap-6 rounded-xl border border-border/50 py-6 shadow-sm",
+        `${UI_CONFIG.blur.card} text-card-foreground flex flex-col gap-6 rounded-xl border border-border/50 py-6`,
         className,
       )}
       {...props}

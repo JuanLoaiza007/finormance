@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Onest } from "next/font/google";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { UI_CONFIG } from "@/lib/ui-config";
 import { BlurredBackground } from "@/components/features/common/BlurredBackground";
 
 const OnestFont = Onest({
@@ -40,7 +41,9 @@ export default function RootLayout({ children }) {
         <ThemeProvider>
           <BlurredBackground />
           {children}
-          <footer className="fixed bottom-0 left-0 w-full bg-background/80 backdrop-blur-md border-t border-border/50 py-2 px-4 z-50">
+          <footer
+            className={`fixed bottom-0 left-0 w-full border-t border-border/50 py-2 px-4 z-50 ${UI_CONFIG.blur.footer}`}
+          >
             <p className="text-[10px] md:text-xs text-muted-foreground text-center font-medium">
               Los resultados no garantizan rendimientos reales ni sustituyen la
               asesoría financiera profesional.

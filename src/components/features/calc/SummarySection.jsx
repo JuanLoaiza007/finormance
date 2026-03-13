@@ -55,7 +55,7 @@ export default function SummarySection({ summary, formData }) {
                 <TableCell>
                   {"$"}
                   {formatterToCOP.format(
-                    summary.Balance.toFixed(2) - summary.Invested.toFixed(2)
+                    summary.Balance.toFixed(2) - summary.Invested.toFixed(2),
                   )}
                 </TableCell>
               </TableRow>

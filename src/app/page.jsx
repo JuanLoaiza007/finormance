@@ -122,7 +122,7 @@ export default function InvestmentCalculatorPage() {
   return (
     <main className="flex flex-col w-full h-full md:h-screen md:flex-row bg-background">
       <section
-        className={`relative flex flex-col w-full md:max-w-1/3 lg:max-w-3/12 pb-2 md:pb-8 rounded-bl-2xl rounded-br-2xl md:rounded-bl-none md:rounded-br-none px-6 md:px-6 gap-1 ${UI_CONFIG.form.background} h-full overflow-hidden border-r ${UI_CONFIG.form.border}`}
+        className={`relative flex flex-col w-full md:max-w-1/3 lg:max-w-1/4 pb-2 md:pb-8 rounded-bl-2xl rounded-br-2xl md:rounded-bl-none md:rounded-br-none px-6 md:px-6 gap-1 ${UI_CONFIG.form.background} h-full overflow-hidden ${UI_CONFIG.form.border}`}
       >
         <BlurredBackground />
         <div className="relative z-10 w-full pt-6 pb-2 md:pt-4 flex flex-row gap-4 select-none text-foreground items-start">
@@ -219,8 +219,10 @@ export default function InvestmentCalculatorPage() {
         ) : (
           schedule.length > 0 && (
             <>
-              <div className="w-full flex  flex-row bg-background/95 backdrop-blur-md p-4 md:p-6 justify-between border-b border-border/50 relative z-10">
-                <h2 className="text-lg font-bold">Resumen</h2>
+              <div
+                className={`w-full flex  flex-row p-4 md:p-6 justify-between border-b border-border/50 relative z-10 ${UI_CONFIG.blur.summaryBar}`}
+              >
+                <h2 className="text-lg font-bold text-foreground">Resumen</h2>
                 {/* <ModeToggle /> */}
               </div>
               <div className="w-full h-full overflow-y-auto relative z-10">
