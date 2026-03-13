@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useCalculator, SCENARIO_COLORS } from "@/context/CalculatorContext";
 import { FormField } from "./FormField";
-import { Plus, Trash2, Palette } from "lucide-react";
+import { Plus, Trash2, Check } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -21,6 +21,84 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+
+function ScenarioNameInput({ scenario, onUpdate }) {
+  const [localName, setLocalName] = useState(scenario.name);
+  const isDifferent = localName !== scenario.name;
+
+  useEffect(() => {
+    setLocalName(scenario.name);
+  }, [scenario.name]);
+
+  const handleSave = () => {
+    onUpdate(scenario.id, "name", localName);
+  };
+
+  return (
+    <div className="flex items-center gap-1 flex-1">
+      <Input
+        className="h-6 bg-transparent border-none p-0 text-[10px] uppercase font-bold text-foreground/70 dark:text-white/70 focus-visible:ring-0 focus-visible:ring-offset-0 flex-1"
+        value={localName}
+        placeholder="Escenario"
+        onChange={(e) => setLocalName(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && isDifferent && handleSave()}
+      />
+      {isDifferent && (
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleSave}
+          className="size-5 text-green-500 hover:text-green-600 hover:bg-green-500/10 shrink-0"
+        >
+          <Check className="size-3" />
+        </Button>
+      )}
+    </div>
+  );
+}
+
+function ScenarioColorPicker({ scenario, onUpdate }) {
+  const [open, setOpen] = useState(false);
+
+  const handleSelect = (color) => {
+    onUpdate(scenario.id, "color", color);
+    setOpen(false);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <button
+          className="size-4 rounded-full shrink-0 transition-transform hover:scale-110 shadow-sm border border-white/20"
+          style={{ backgroundColor: scenario.color }}
+          title="Cambiar color"
+        />
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[300px]">
+        <DialogHeader>
+          <DialogTitle className="text-xs uppercase font-bold tracking-widest">
+            Seleccionar Color
+          </DialogTitle>
+        </DialogHeader>
+        <div className="grid grid-cols-4 gap-3 p-2">
+          {SCENARIO_COLORS.map((color) => (
+            <button
+              key={color}
+              className={cn(
+                "size-10 rounded-full border-2 transition-all hover:scale-110",
+                scenario.color === color
+                  ? "border-primary scale-110 shadow-md"
+                  : "border-transparent",
+              )}
+              style={{ backgroundColor: color }}
+              onClick={() => handleSelect(color)}
+            />
+          ))}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 export function CalculatorForm({ className }) {
   const {
@@ -143,46 +221,8 @@ export function CalculatorForm({ className }) {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 flex-1">
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <button
-                        className="size-4 rounded-full shrink-0 transition-transform hover:scale-110 shadow-sm border border-white/20"
-                        style={{ backgroundColor: s.color }}
-                        title="Cambiar color"
-                      />
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[300px]">
-                      <DialogHeader>
-                        <DialogTitle className="text-xs uppercase font-bold tracking-widest">
-                          Seleccionar Color
-                        </DialogTitle>
-                      </DialogHeader>
-                      <div className="grid grid-cols-4 gap-3 p-2">
-                        {SCENARIO_COLORS.map((color) => (
-                          <button
-                            key={color}
-                            className={cn(
-                              "size-10 rounded-full border-2 transition-all hover:scale-110",
-                              s.color === color
-                                ? "border-primary scale-110 shadow-md"
-                                : "border-transparent",
-                            )}
-                            style={{ backgroundColor: color }}
-                            onClick={() => updateScenario(s.id, "color", color)}
-                          />
-                        ))}
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-
-                  <Input
-                    className="h-6 bg-transparent border-none p-0 text-[10px] uppercase font-bold text-foreground/70 dark:text-white/70 focus-visible:ring-0 focus-visible:ring-offset-0"
-                    value={s.name}
-                    placeholder={`Escenario ${index + 1}`}
-                    onChange={(e) =>
-                      updateScenario(s.id, "name", e.target.value)
-                    }
-                  />
+                  <ScenarioColorPicker scenario={s} onUpdate={updateScenario} />
+                  <ScenarioNameInput scenario={s} onUpdate={updateScenario} />
                 </div>
                 {scenarios.length > 1 && (
                   <Button
