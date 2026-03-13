@@ -57,7 +57,7 @@ export function ScheduleTable({ data, scenarios, className }) {
                 {scenarios.map((s) => (
                   <TableCell
                     key={s.id}
-                    className="text-[11px] uppercase text-right pr-4"
+                    className="text-xs uppercase text-right pr-4 font-bold"
                   >
                     $
                     {formatterToCOP.format(

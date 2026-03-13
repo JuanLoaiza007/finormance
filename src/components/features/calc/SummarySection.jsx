@@ -15,7 +15,7 @@ export default function SummarySection({ comparisonData }) {
   return (
     <Card className="w-full overflow-hidden">
       <CardHeader className="p-4 pb-0">
-        <CardTitle className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">
+        <CardTitle className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground">
           Comparativa de Escenarios
         </CardTitle>
       </CardHeader>
@@ -23,16 +23,16 @@ export default function SummarySection({ comparisonData }) {
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent border-b border-border/50">
-              <TableHead className="text-[10px] uppercase font-bold pl-4">
+              <TableHead className="text-[11px] uppercase font-bold pl-4">
                 Escenario
               </TableHead>
-              <TableHead className="text-[10px] uppercase font-bold text-center">
+              <TableHead className="text-[11px] uppercase font-bold text-center">
                 Configuración
               </TableHead>
-              <TableHead className="text-[10px] uppercase font-bold text-right">
+              <TableHead className="text-[11px] uppercase font-bold text-right">
                 Saldo Final
               </TableHead>
-              <TableHead className="text-[10px] uppercase font-bold text-right pr-4">
+              <TableHead className="text-[11px] uppercase font-bold text-right pr-4">
                 Ganancia
               </TableHead>
             </TableRow>
@@ -49,18 +49,18 @@ export default function SummarySection({ comparisonData }) {
                       className="size-2 rounded-full shrink-0"
                       style={{ backgroundColor: s.color }}
                     />
-                    <span className="text-[11px] font-bold uppercase truncate max-w-[100px]">
+                    <span className="text-xs font-bold uppercase truncate max-w-[120px]">
                       {s.name}
                     </span>
                   </div>
                 </TableCell>
-                <TableCell className="text-center text-[10px] font-medium uppercase text-muted-foreground">
+                <TableCell className="text-center text-[11px] font-medium uppercase text-muted-foreground">
                   {s.configLabel}
                 </TableCell>
-                <TableCell className="text-right text-[11px] font-bold uppercase">
+                <TableCell className="text-right text-xs font-bold uppercase">
                   ${formatterToCOP.format(s.finalBalance.toFixed(2))}
                 </TableCell>
-                <TableCell className="text-right text-[11px] font-bold uppercase pr-4 text-primary">
+                <TableCell className="text-right text-xs font-bold uppercase pr-4 text-primary">
                   ${formatterToCOP.format(s.totalGain.toFixed(2))}
                 </TableCell>
               </TableRow>

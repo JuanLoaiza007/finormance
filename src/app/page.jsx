@@ -13,7 +13,7 @@ function CalculatorContent() {
   const [isFormExpanded, setIsFormExpanded] = useState(true);
 
   return (
-    <main className="flex flex-col w-full h-full md:h-screen md:flex-row bg-background">
+    <main className="flex flex-col w-full h-full md:h-screen md:flex-row bg-background overflow-hidden">
       <section
         className={`relative flex flex-col dark:bg-[oklch(0.2_0.1_285)] ${UI_CONFIG.form.container} ${UI_CONFIG.form.shadow}`}
       >
@@ -25,7 +25,7 @@ function CalculatorContent() {
         />
 
         <div
-          className={`relative z-10 w-full flex flex-col overflow-y-auto gap-2 md:gap-4 transition-[max-height,opacity,margin] duration-500 ease-in-out ${isFormExpanded ? "max-h-[2000px] opacity-100 mt-2" : "max-h-0 opacity-0 md:max-h-full md:opacity-100"}`}
+          className={`relative z-10 w-full flex flex-col overflow-y-auto transition-[max-height,opacity,margin] duration-500 ease-in-out ${isFormExpanded ? "max-h-[2000px] opacity-100 mt-2" : "max-h-0 opacity-0 md:max-h-full md:opacity-100"}`}
         >
           {loading ? (
             <FormSkeleton />
