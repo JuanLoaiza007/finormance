@@ -8,7 +8,7 @@ function Card({ className, ...props }) {
     <div
       data-slot="card"
       className={cn(
-        `${UI_CONFIG.blur.card} text-card-foreground flex flex-col gap-6 rounded-xl border border-border/50 py-6`,
+        `${UI_CONFIG.blur.card} text-card-foreground flex flex-col rounded-xl border shadow-md p-3 sm:p-4 border-border col-span-2 sm:col-span-1`,
         className,
       )}
       {...props}
