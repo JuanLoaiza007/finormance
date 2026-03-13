@@ -1,6 +1,6 @@
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
 import { Onest } from "next/font/google";
+import { ThemeProvider } from "@/context/ThemeContext";
 import { BlurredBackground } from "@/components/features/common/BlurredBackground";
 
 const OnestFont = Onest({
@@ -37,12 +37,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="es" className={OnestFont.className} suppressHydrationWarning>
       <body className="relative min-h-screen">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange={false}
-        >
+        <ThemeProvider>
           <BlurredBackground />
           {children}
           <footer className="fixed bottom-0 left-0 w-full bg-background/80 backdrop-blur-md border-t border-border/50 py-2 px-4 z-50">

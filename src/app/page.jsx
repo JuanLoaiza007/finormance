@@ -191,9 +191,10 @@ export default function InvestmentCalculatorPage() {
         </div>
       </section>
 
-      <section className="w-full flex flex-col bg-muted overflow-hidden relative">
+      <section className="w-full flex flex-col bg-background overflow-hidden relative">
+        <BlurredBackground />
         {loading ? (
-          <div className="w-full h-full overflow-y-auto">
+          <div className="w-full h-full overflow-y-auto relative z-10">
             <div className="w-full flex flex-col overflow-y-auto gap-4 md:gap-4 pt-4 pb-8 p-4 md:p-6">
               {/* Skeleton for Summary */}
               <div className="w-full">
@@ -218,11 +219,11 @@ export default function InvestmentCalculatorPage() {
         ) : (
           schedule.length > 0 && (
             <>
-              <div className="w-full flex  flex-row bg-background p-4 md:p-6 justify-between border-b border-border/50">
+              <div className="w-full flex  flex-row bg-background/95 backdrop-blur-md p-4 md:p-6 justify-between border-b border-border/50 relative z-10">
                 <h2 className="text-lg font-bold">Resumen</h2>
                 {/* <ModeToggle /> */}
               </div>
-              <div className="w-full h-full overflow-y-auto">
+              <div className="w-full h-full overflow-y-auto relative z-10">
                 <div className="w-full flex flex-col overflow-y-auto gap-4 md:gap-6 p-4 pb-16 md:pb-6 md:p-6 justify-center items-center">
                   {/* Resumen */}
                   <SummarySection summary={summary} formData={formData} />
