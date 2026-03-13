@@ -147,10 +147,6 @@ export function CalculatorProvider({ children }) {
   const addScenario = () => {
     if (scenarios.length >= 4) return;
 
-    if (scenarios.length === 1) {
-      updateGlobalParam("extraContribution", "0");
-    }
-
     // Encontrar un color que no esté en uso si es posible
     const usedColors = scenarios.map((s) => s.color);
     const availableColor =

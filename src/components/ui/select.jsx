@@ -14,8 +14,14 @@ function SelectGroup({ ...props }) {
   return <SelectPrimitive.Group data-slot="select-group" {...props} />;
 }
 
-function SelectValue({ ...props }) {
-  return <SelectPrimitive.Value data-slot="select-value" {...props} />;
+function SelectValue({ className, ...props }) {
+  return (
+    <SelectPrimitive.Value
+      data-slot="select-value"
+      className={cn("truncate", className)}
+      {...props}
+    />
+  );
 }
 
 function SelectTrigger({ className, size = "default", children, ...props }) {

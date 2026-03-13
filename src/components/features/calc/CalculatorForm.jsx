@@ -157,42 +157,35 @@ export function CalculatorForm({ className }) {
             </Select>
           </FormField>
 
-          {scenarios.length === 1 && (
-            <>
-              <FormField label="Recargo extra" className="col-span-2">
-                <Input
-                  type="number"
-                  className={inputClass}
-                  placeholder="0"
-                  value={globalParams.extraContribution}
-                  onChange={(e) =>
-                    updateGlobalParam("extraContribution", e.target.value)
-                  }
-                  onWheel={(event) => event.currentTarget.blur()}
-                />
-              </FormField>
+          <FormField label="Recargo mensual">
+            <Input
+              type="number"
+              className={inputClass}
+              placeholder="0"
+              value={globalParams.extraContribution}
+              onChange={(e) =>
+                updateGlobalParam("extraContribution", e.target.value)
+              }
+              onWheel={(event) => event.currentTarget.blur()}
+            />
+          </FormField>
 
-              {globalParams.extraContribution &&
-                globalParams.extraContribution !== "0" && (
-                  <FormField label="Momento de recargo" className="col-span-2">
-                    <Select
-                      onValueChange={(val) =>
-                        updateGlobalParam("contributionTiming", val)
-                      }
-                      defaultValue={globalParams.contributionTiming}
-                    >
-                      <SelectTrigger className={inputClass}>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="start">Inicio</SelectItem>
-                        <SelectItem value="end">Fin</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormField>
-                )}
-            </>
-          )}
+          <FormField label="Momento">
+            <Select
+              onValueChange={(val) =>
+                updateGlobalParam("contributionTiming", val)
+              }
+              defaultValue={globalParams.contributionTiming}
+            >
+              <SelectTrigger className={inputClass}>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="start">Al inicio</SelectItem>
+                <SelectItem value="end">Al fin</SelectItem>
+              </SelectContent>
+            </Select>
+          </FormField>
         </div>
       </div>
 
@@ -236,11 +229,11 @@ export function CalculatorForm({ className }) {
                 )}
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-2">
                 <FormField label="Tasa">
                   <Input
                     type="number"
-                    className={inputClass}
+                    className={cn(inputClass, "px-2")}
                     value={s.rateValue}
                     onChange={(e) =>
                       updateScenario(s.id, "rateValue", e.target.value)
@@ -255,7 +248,7 @@ export function CalculatorForm({ className }) {
                     }
                     defaultValue={s.rateType}
                   >
-                    <SelectTrigger className={inputClass}>
+                    <SelectTrigger className={cn(inputClass, "px-2")}>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -265,8 +258,27 @@ export function CalculatorForm({ className }) {
                   </Select>
                 </FormField>
 
+                <FormField label="Frecuencia">
+                  <Select
+                    onValueChange={(val) =>
+                      updateScenario(s.id, "payoutFreq", val)
+                    }
+                    defaultValue={s.payoutFreq}
+                  >
+                    <SelectTrigger className={cn(inputClass, "px-2")}>
+                      <SelectValue>
+                        {s.payoutFreq === "daily" ? "D" : "M"}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="daily">Diariamente</SelectItem>
+                      <SelectItem value="monthly">Mensualmente</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormField>
+
                 {s.rateType === "NA" && (
-                  <FormField label="Frecuencia" className="col-span-2">
+                  <FormField label="Frecuencia Nominal" className="col-span-3">
                     <Select
                       onValueChange={(val) =>
                         updateScenario(s.id, "nominalFreq", val)
@@ -283,23 +295,6 @@ export function CalculatorForm({ className }) {
                     </Select>
                   </FormField>
                 )}
-
-                <FormField label="Pago Interés" className="col-span-2">
-                  <Select
-                    onValueChange={(val) =>
-                      updateScenario(s.id, "payoutFreq", val)
-                    }
-                    defaultValue={s.payoutFreq}
-                  >
-                    <SelectTrigger className={inputClass}>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="daily">Diario</SelectItem>
-                      <SelectItem value="monthly">Mensual</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormField>
               </div>
             </div>
           ))}

@@ -8,9 +8,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Star } from "lucide-react";
 
 export default function SummarySection({ comparisonData }) {
   const { summaries } = comparisonData;
+
+  // Encontrar la ganancia máxima
+  const maxGain = Math.max(...summaries.map((s) => s.totalGain));
 
   return (
     <Card className="w-full overflow-hidden">
@@ -52,6 +56,9 @@ export default function SummarySection({ comparisonData }) {
                     <span className="text-xs font-bold uppercase truncate max-w-[120px]">
                       {s.name}
                     </span>
+                    {s.totalGain === maxGain && s.totalGain > 0 && (
+                      <Star className="size-3 text-yellow-500 fill-yellow-500 shrink-0" />
+                    )}
                   </div>
                 </TableCell>
                 <TableCell className="text-center text-[11px] font-medium uppercase text-muted-foreground">
