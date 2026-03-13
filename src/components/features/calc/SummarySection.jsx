@@ -24,19 +24,19 @@ export default function SummarySection({ summary, formData }) {
   ];
 
   return (
-    <div className="grid grid-cols-4 md:grid-cols-4 gap-3 w-full">
+    <div className="grid grid-cols-4 gap-3 w-full">
       {items.map((item) => (
         <Card
           key={item.title}
           className="flex flex-col p-0 overflow-hidden min-w-0"
         >
           <CardHeader className="p-2 px-3 pb-0">
-            <CardTitle className="text-[9px] uppercase tracking-widest text-muted-foreground font-bold truncate">
+            <CardTitle className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold truncate">
               {item.title}
             </CardTitle>
           </CardHeader>
           <CardContent className="p-2 px-3 pt-0.5">
-            <p className="text-xs md:text-sm font-bold text-foreground truncate uppercase">
+            <p className="text-sm md:text-base font-bold text-foreground truncate uppercase">
               {item.value}
             </p>
           </CardContent>

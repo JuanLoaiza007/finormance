@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 export function FormField({ label, error, children, className }) {
   const labelClass =
-    "text-foreground/80 dark:text-muted-foreground font-semibold ml-1 truncate h-5 flex items-center uppercase text-[10px] tracking-wider";
+    "text-foreground/80 dark:text-muted-foreground font-semibold ml-1 truncate h-5 flex items-center uppercase text-[11px] tracking-wider";
   const errorClass =
     "text-[10px] font-medium text-destructive ml-1 leading-tight truncate h-4 uppercase";
 

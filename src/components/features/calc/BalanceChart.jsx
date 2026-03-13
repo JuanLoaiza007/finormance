@@ -23,7 +23,7 @@ export function BalanceChart({ data, className }) {
   return (
     <Card className={className}>
       <CardHeader className="p-4 pb-0">
-        <CardTitle className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">
+        <CardTitle className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground">
           Evolución del Saldo
         </CardTitle>
       </CardHeader>
@@ -48,7 +48,7 @@ export function BalanceChart({ data, className }) {
               formatter={(value) => formatterToCOP.format(value)}
               labelFormatter={(label) => `PERÍODO ${label}`}
               contentStyle={{
-                fontSize: 10,
+                fontSize: 11,
                 backgroundColor: "var(--popover)",
                 borderColor: "var(--border)",
                 borderRadius: "var(--radius)",

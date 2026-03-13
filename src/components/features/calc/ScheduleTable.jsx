@@ -21,7 +21,7 @@ export function ScheduleTable({ data, className, formData }) {
       }
     >
       <CardHeader className="p-4 pb-0">
-        <CardTitle className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">
+        <CardTitle className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground">
           Detalle de Períodos
         </CardTitle>
       </CardHeader>
@@ -29,18 +29,18 @@ export function ScheduleTable({ data, className, formData }) {
         <Table>
           <TableHeader className="sticky top-0 bg-background/80 backdrop-blur-md z-10">
             <TableRow className="hover:bg-transparent border-b border-border/50">
-              <TableHead className="w-12 text-center text-[9px] uppercase font-bold tracking-tighter">
+              <TableHead className="w-12 text-center text-[11px] uppercase font-bold tracking-tighter">
                 #
               </TableHead>
-              <TableHead className="text-[9px] uppercase font-bold tracking-tighter">
+              <TableHead className="text-[11px] uppercase font-bold tracking-tighter">
                 Balance
               </TableHead>
               {showInvestedColumn && (
-                <TableHead className="text-[9px] uppercase font-bold tracking-tighter">
+                <TableHead className="text-[11px] uppercase font-bold tracking-tighter">
                   Invertido
                 </TableHead>
               )}
-              <TableHead className="text-right text-[9px] uppercase font-bold tracking-tighter">
+              <TableHead className="text-right text-[11px] uppercase font-bold tracking-tighter">
                 Interés
               </TableHead>
             </TableRow>
@@ -51,20 +51,20 @@ export function ScheduleTable({ data, className, formData }) {
                 key={row.Period}
                 className="border-b border-border/20 last:border-0"
               >
-                <TableCell className="text-center font-medium text-[10px] uppercase">
+                <TableCell className="text-center font-medium text-xs uppercase">
                   {row.Period}
                 </TableCell>
-                <TableCell className="text-[10px] uppercase">
+                <TableCell className="text-xs uppercase">
                   {"$"}
                   {formatterToCOP.format(row.Balance.toFixed(2))}
                 </TableCell>
                 {showInvestedColumn && (
-                  <TableCell className="text-[10px] uppercase">
+                  <TableCell className="text-xs uppercase">
                     {"$"}
                     {formatterToCOP.format(row.Invested.toFixed(2))}
                   </TableCell>
                 )}
-                <TableCell className="text-right font-medium text-[10px] uppercase">
+                <TableCell className="text-right font-medium text-xs uppercase">
                   {"$"}
                   {formatterToCOP.format(row.InterestPeriod.toFixed(2))}
                 </TableCell>
