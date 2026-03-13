@@ -10,21 +10,60 @@ import { initialCalculatorData } from "@/components/schemas/calculatorForm";
 
 const CalculatorContext = createContext();
 
+export const SCENARIO_COLORS = [
+  "oklch(0.6 0.2 290)", // Morado
+  "oklch(0.6 0.15 220)", // Azul
+  "oklch(0.7 0.15 150)", // Esmeralda
+  "oklch(0.8 0.15 80)", // Ámbar
+  "oklch(0.6 0.2 20)", // Rojo/Rosa
+  "oklch(0.5 0.1 180)", // Teal
+  "oklch(0.7 0.2 330)", // Magenta
+  "oklch(0.4 0.1 250)", // Indigo
+];
+
 export function CalculatorProvider({ children }) {
-  const [formData, setFormData] = useState(initialCalculatorData);
-  const [schedule, setSchedule] = useState([]);
+  const [globalParams, setGlobalParams] = useState({
+    initialCapital: initialCalculatorData.initialCapital,
+    periods: initialCalculatorData.periods,
+    granularity: initialCalculatorData.granularity,
+    extraContribution: initialCalculatorData.extraContribution,
+    contributionTiming: initialCalculatorData.contributionTiming,
+  });
+
+  const [scenarios, setScenarios] = useState([
+    {
+      id: Math.random().toString(36).substr(2, 9),
+      name: "Escenario 1",
+      rateValue: initialCalculatorData.rateValue,
+      rateType: initialCalculatorData.rateType,
+      nominalFreq: initialCalculatorData.nominalFreq,
+      payoutFreq: "monthly",
+      color: SCENARIO_COLORS[0],
+    },
+  ]);
+
+  const [comparisonData, setComparisonData] = useState({
+    schedules: [],
+    summaries: [],
+    combinedSchedule: [],
+  });
+
   const [loading, setLoading] = useState(true);
 
   // Cargar datos guardados
   useEffect(() => {
-    const saved = localStorage.getItem("finormance-form-data");
-    if (saved) {
+    const savedGlobal = localStorage.getItem("finormance-global-params");
+    const savedScenarios = localStorage.getItem("finormance-scenarios");
+
+    if (savedGlobal) {
       try {
-        const parsed = JSON.parse(saved);
-        setFormData(parsed);
-      } catch (e) {
-        console.error("Error parsing saved form data", e);
-      }
+        setGlobalParams(JSON.parse(savedGlobal));
+      } catch (e) {}
+    }
+    if (savedScenarios) {
+      try {
+        setScenarios(JSON.parse(savedScenarios));
+      } catch (e) {}
     }
     setLoading(false);
   }, []);
@@ -39,17 +78,15 @@ export function CalculatorProvider({ children }) {
     return type === "EA" ? r : Math.pow(1 + r / freq, freq) - 1;
   };
 
-  const generateSchedule = useCallback((parsed) => {
+  const calculateScenario = useCallback((scenario, globals) => {
     const {
       initialCapital,
-      rateValue,
-      nominalFreq,
       extraContribution,
       periods,
-      rateType,
       granularity,
       contributionTiming,
-    } = parsed;
+    } = globals;
+    const { rateValue, rateType, nominalFreq } = scenario;
 
     const cap = parseNumber(initialCapital);
     const rate = parseNumber(rateValue);
@@ -69,19 +106,16 @@ export function CalculatorProvider({ children }) {
 
     for (let i = 1; i <= per; i++) {
       let interestPeriod = 0;
-
       if (contributionTiming === "start") {
         balance += extra;
         invested += extra;
-        interestPeriod = balance * r;
-        balance += interestPeriod;
-      } else {
-        interestPeriod = balance * r;
-        balance += interestPeriod;
+      }
+      interestPeriod = balance * r;
+      balance += interestPeriod;
+      if (contributionTiming === "end") {
         balance += extra;
         invested += extra;
       }
-
       entries.push({
         Period: i,
         Balance: balance,
@@ -89,35 +123,121 @@ export function CalculatorProvider({ children }) {
         InterestPeriod: interestPeriod,
       });
     }
-
     return entries;
   }, []);
 
-  const updateField = (field, value) => {
-    setFormData((prev) => {
+  const updateGlobalParam = (field, value) => {
+    setGlobalParams((prev) => {
       const newData = { ...prev, [field]: value };
-      localStorage.setItem("finormance-form-data", JSON.stringify(newData));
+      localStorage.setItem("finormance-global-params", JSON.stringify(newData));
       return newData;
     });
   };
 
-  // Actualizar schedule cuando cambie formData
-  useEffect(() => {
-    if (!loading) {
-      setSchedule(generateSchedule(formData));
-    }
-  }, [formData, loading, generateSchedule]);
+  const updateScenario = (id, field, value) => {
+    setScenarios((prev) => {
+      const newData = prev.map((s) =>
+        s.id === id ? { ...s, [field]: value } : s,
+      );
+      localStorage.setItem("finormance-scenarios", JSON.stringify(newData));
+      return newData;
+    });
+  };
 
-  const summary = schedule.length ? schedule[schedule.length - 1] : {};
+  const addScenario = () => {
+    if (scenarios.length >= 4) return;
+
+    if (scenarios.length === 1) {
+      updateGlobalParam("extraContribution", "0");
+    }
+
+    // Encontrar un color que no esté en uso si es posible
+    const usedColors = scenarios.map((s) => s.color);
+    const availableColor =
+      SCENARIO_COLORS.find((c) => !usedColors.includes(c)) ||
+      SCENARIO_COLORS[scenarios.length % SCENARIO_COLORS.length];
+
+    const newScenario = {
+      id: Math.random().toString(36).substr(2, 9),
+      name: "Escenario",
+      rateValue: "5",
+      rateType: "EA",
+      nominalFreq: "12",
+      payoutFreq: "monthly",
+      color: availableColor,
+    };
+    setScenarios((prev) => {
+      const newData = [...prev, newScenario];
+      localStorage.setItem("finormance-scenarios", JSON.stringify(newData));
+      return newData;
+    });
+  };
+
+  const removeScenario = (id) => {
+    if (scenarios.length <= 1) return;
+    setScenarios((prev) => {
+      const newData = prev.filter((s) => s.id !== id);
+      localStorage.setItem("finormance-scenarios", JSON.stringify(newData));
+      return newData;
+    });
+  };
+
+  // Recalcular todo cuando cambien los datos
+  useEffect(() => {
+    if (loading) return;
+
+    const results = scenarios.map((s, index) => ({
+      id: s.id,
+      name: s.name || "Escenario",
+      color: s.color,
+      configLabel: `${s.rateValue}% ${s.rateType} | ${s.payoutFreq === "daily" ? "D" : "M"}`,
+      schedule: calculateScenario(s, globalParams),
+    }));
+
+    const summaries = results.map((r) => {
+      const lastEntry = r.schedule[r.schedule.length - 1] || {
+        Balance: 0,
+        Invested: 0,
+      };
+      return {
+        id: r.id,
+        name: r.name,
+        color: r.color,
+        configLabel: r.configLabel,
+        finalBalance: lastEntry.Balance,
+        totalInvested: lastEntry.Invested,
+        totalGain: lastEntry.Balance - lastEntry.Invested,
+      };
+    });
+
+    const maxPeriods = parseInt(globalParams.periods) || 0;
+    const combined = [];
+    for (let i = 1; i <= maxPeriods; i++) {
+      const entry = { Period: i };
+      results.forEach((r) => {
+        entry[`balance_${r.id}`] = r.schedule[i - 1]?.Balance || 0;
+      });
+      combined.push(entry);
+    }
+
+    setComparisonData({
+      schedules: results,
+      summaries,
+      combinedSchedule: combined,
+    });
+  }, [globalParams, scenarios, loading, calculateScenario]);
 
   return (
     <CalculatorContext.Provider
       value={{
-        formData,
-        schedule,
+        globalParams,
+        scenarios,
+        comparisonData,
         loading,
-        updateField,
-        summary,
+        updateGlobalParam,
+        updateScenario,
+        addScenario,
+        removeScenario,
       }}
     >
       {children}

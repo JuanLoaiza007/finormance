@@ -8,7 +8,7 @@ import { BalanceChart } from "./BalanceChart";
 import { ScheduleTable } from "./ScheduleTable";
 
 export function ResultsSection() {
-  const { schedule, loading, summary, formData } = useCalculator();
+  const { comparisonData, scenarios, loading } = useCalculator();
 
   return (
     <section className={`${UI_CONFIG.results.container}`}>
@@ -16,32 +16,33 @@ export function ResultsSection() {
       {loading ? (
         <ResultsSkeleton />
       ) : (
-        schedule.length > 0 && (
+        comparisonData.summaries.length > 0 && (
           <>
             <div
               className={`w-full flex flex-row p-4 md:p-6 justify-between border-b border-border/50 relative z-10 ${UI_CONFIG.blur.summaryBar}`}
             >
               <h2 className="text-lg font-bold text-foreground uppercase tracking-tight">
-                Resumen
+                Resumen Comparativo
               </h2>
             </div>
             <div className="w-full h-full overflow-y-auto relative z-10">
               <div className="w-full flex flex-col gap-4 md:gap-6 p-4 pb-16 md:pb-6 md:p-6">
-                {/* Resumen en Cards individuales */}
-                <SummarySection summary={summary} formData={formData} />
+                {/* Tabla de Resumen Comparativo */}
+                <SummarySection comparisonData={comparisonData} />
 
                 <div className="w-full flex flex-col lg:grid lg:grid-cols-2 gap-4 md:gap-6">
-                  {/* Gráfico */}
+                  {/* Gráfico Multi-Línea */}
                   <BalanceChart
                     className="w-full flex flex-col"
-                    data={schedule}
+                    data={comparisonData.combinedSchedule}
+                    scenarios={scenarios}
                   />
 
-                  {/* Tabla detalle */}
+                  {/* Tabla de Balances Comparativos */}
                   <ScheduleTable
-                    data={schedule}
+                    data={comparisonData.combinedSchedule}
+                    scenarios={scenarios}
                     className="w-full"
-                    formData={formData}
                   />
                 </div>
               </div>

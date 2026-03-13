@@ -6,16 +6,20 @@ import {
   Tooltip,
   CartesianGrid,
   ResponsiveContainer,
+  Legend,
 } from "recharts";
 import { formatterToCOP } from "@/util/number";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export function BalanceChart({ data, className }) {
+export function BalanceChart({ data, scenarios, className }) {
   if (!data || data.length === 0) return null;
 
-  const balances = data.map((d) => d.Balance);
-  const min = Math.min(...balances);
-  const max = Math.max(...balances);
+  // Calcular min/max para el dominio del eje Y
+  const allBalances = data.flatMap((d) =>
+    scenarios.map((s) => d[`balance_${s.id}`]),
+  );
+  const min = Math.min(...allBalances);
+  const max = Math.max(...allBalances);
 
   const yMin = min * 0.98;
   const yMax = max * 1.02;
@@ -24,10 +28,10 @@ export function BalanceChart({ data, className }) {
     <Card className={className}>
       <CardHeader className="p-4 pb-0">
         <CardTitle className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground">
-          Evolución del Saldo
+          Evolución Comparativa
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-4 pt-4 h-[300px] w-full">
+      <CardContent className="p-4 pt-4 h-[350px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
             <CartesianGrid
@@ -48,7 +52,7 @@ export function BalanceChart({ data, className }) {
               formatter={(value) => formatterToCOP.format(value)}
               labelFormatter={(label) => `PERÍODO ${label}`}
               contentStyle={{
-                fontSize: 11,
+                fontSize: 10,
                 backgroundColor: "var(--popover)",
                 borderColor: "var(--border)",
                 borderRadius: "var(--radius)",
@@ -58,13 +62,31 @@ export function BalanceChart({ data, className }) {
                 fontWeight: "bold",
               }}
             />
-            <Line
-              type="monotone"
-              dataKey="Balance"
-              stroke="var(--primary)"
-              strokeWidth={2}
-              dot={false}
+            <Legend
+              verticalAlign="top"
+              height={36}
+              formatter={(value) => {
+                const scenario = scenarios.find(
+                  (s) => `balance_${s.id}` === value,
+                );
+                return (
+                  <span className="text-[10px] uppercase font-bold text-muted-foreground">
+                    {scenario?.name || value}
+                  </span>
+                );
+              }}
             />
+            {scenarios.map((s) => (
+              <Line
+                key={s.id}
+                type="monotone"
+                dataKey={`balance_${s.id}`}
+                stroke={s.color}
+                strokeWidth={2}
+                dot={false}
+                animationDuration={500}
+              />
+            ))}
           </LineChart>
         </ResponsiveContainer>
       </CardContent>

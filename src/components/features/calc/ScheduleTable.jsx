@@ -10,39 +10,39 @@ import {
 } from "@/components/ui/table";
 import { formatterToCOP } from "@/util/number";
 
-export function ScheduleTable({ data, className, formData }) {
-  const showInvestedColumn =
-    formData.extraContribution && formData.extraContribution !== "0";
-
+export function ScheduleTable({ data, scenarios, className }) {
   return (
     <Card
       className={
-        "max-h-[400px] overflow-hidden flex flex-col " + (className || "")
+        "max-h-[450px] overflow-hidden flex flex-col " + (className || "")
       }
     >
       <CardHeader className="p-4 pb-0">
         <CardTitle className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground">
-          Detalle de Períodos
+          Balances por Período
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-0 mt-4 overflow-y-auto flex-1">
+      <CardContent className="p-0 mt-4 overflow-auto flex-1">
         <Table>
           <TableHeader className="sticky top-0 bg-background/80 backdrop-blur-md z-10">
             <TableRow className="hover:bg-transparent border-b border-border/50">
               <TableHead className="w-12 text-center text-[11px] uppercase font-bold tracking-tighter">
                 #
               </TableHead>
-              <TableHead className="text-[11px] uppercase font-bold tracking-tighter">
-                Balance
-              </TableHead>
-              {showInvestedColumn && (
-                <TableHead className="text-[11px] uppercase font-bold tracking-tighter">
-                  Invertido
+              {scenarios.map((s) => (
+                <TableHead
+                  key={s.id}
+                  className="text-[11px] uppercase font-bold tracking-tighter text-right pr-4"
+                >
+                  <div className="flex items-center justify-end gap-1.5">
+                    <div
+                      className="size-1.5 rounded-full"
+                      style={{ backgroundColor: s.color }}
+                    />
+                    {s.name}
+                  </div>
                 </TableHead>
-              )}
-              <TableHead className="text-right text-[11px] uppercase font-bold tracking-tighter">
-                Interés
-              </TableHead>
+              ))}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -54,20 +54,17 @@ export function ScheduleTable({ data, className, formData }) {
                 <TableCell className="text-center font-medium text-xs uppercase">
                   {row.Period}
                 </TableCell>
-                <TableCell className="text-xs uppercase">
-                  {"$"}
-                  {formatterToCOP.format(row.Balance.toFixed(2))}
-                </TableCell>
-                {showInvestedColumn && (
-                  <TableCell className="text-xs uppercase">
-                    {"$"}
-                    {formatterToCOP.format(row.Invested.toFixed(2))}
+                {scenarios.map((s) => (
+                  <TableCell
+                    key={s.id}
+                    className="text-[11px] uppercase text-right pr-4"
+                  >
+                    $
+                    {formatterToCOP.format(
+                      (row[`balance_${s.id}`] || 0).toFixed(2),
+                    )}
                   </TableCell>
-                )}
-                <TableCell className="text-right font-medium text-xs uppercase">
-                  {"$"}
-                  {formatterToCOP.format(row.InterestPeriod.toFixed(2))}
-                </TableCell>
+                ))}
               </TableRow>
             ))}
           </TableBody>
