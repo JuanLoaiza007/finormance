@@ -15,7 +15,7 @@ function CalculatorContent() {
   return (
     <main className="flex flex-col w-full h-full md:h-screen md:flex-row bg-background">
       <section
-        className={`relative flex flex-col ${UI_CONFIG.form.container} ${UI_CONFIG.form.shadow}`}
+        className={`relative flex flex-col dark:bg-[oklch(0.2_0.1_285)] ${UI_CONFIG.form.container} ${UI_CONFIG.form.shadow}`}
       >
         <BlurredBackground location="form" />
 

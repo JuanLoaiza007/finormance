@@ -18,7 +18,7 @@ export function CalculatorForm({ className }) {
   const [errors, setErrors] = useState({});
 
   const inputClass =
-    "text-foreground bg-background/60 backdrop-blur-sm border-border/50 rounded-[var(--radius)] shadow-sm font-medium text-sm py-2 h-10 transition-all focus:bg-background focus:ring-0 w-full flex items-center";
+    "text-foreground bg-background/60 backdrop-blur-sm border-border/50 rounded-[var(--radius)] shadow-sm font-medium text-sm py-2 h-10 transition-all focus:bg-background focus:ring-0 w-full flex items-center dark:text-white dark:bg-white/10 dark:border-white/20 dark:focus:bg-white/20";
 
   useEffect(() => {
     const result = calculatorSchema.safeParse(formData);
