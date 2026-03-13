@@ -8,9 +8,9 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { formatterToCOP } from "@/util/number";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export function BalanceChart({ data, className, width, height }) {
+export function BalanceChart({ data, className }) {
   if (!data || data.length === 0) return null;
 
   const balances = data.map((d) => d.Balance);
@@ -22,34 +22,46 @@ export function BalanceChart({ data, className, width, height }) {
 
   return (
     <Card className={className}>
-      <CardContent className={"flex justify-center items-center my-auto"}>
-        <ResponsiveContainer width={width} height={height}>
+      <CardHeader className="p-4 pb-0">
+        <CardTitle className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">
+          Evolución del Saldo
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-4 pt-4 h-[300px] w-full">
+        <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke="currentColor"
+              opacity={0.1}
+            />
             <XAxis
               dataKey="Period"
-              tick={{ fontSize: 10 }}
-              label={{
-                value: "Período",
-                position: "insideBottom",
-                fontSize: 12,
-              }}
+              tick={{ fontSize: 10, fill: "currentColor", opacity: 0.6 }}
             />
             <YAxis
               domain={[yMin, yMax]}
-              tick={{ fontSize: 10 }}
+              tick={{ fontSize: 10, fill: "currentColor", opacity: 0.6 }}
               tickFormatter={(value) => formatterToCOP.format(value)}
             />
             <Tooltip
               formatter={(value) => formatterToCOP.format(value)}
-              labelFormatter={(label) => `Período ${label}`}
-              contentStyle={{ fontSize: 12 }}
-              itemStyle={{ fontSize: 12 }}
+              labelFormatter={(label) => `PERÍODO ${label}`}
+              contentStyle={{
+                fontSize: 10,
+                backgroundColor: "var(--popover)",
+                borderColor: "var(--border)",
+                borderRadius: "var(--radius)",
+                color: "var(--popover-foreground)",
+                backdropFilter: "blur(8px)",
+                textTransform: "uppercase",
+                fontWeight: "bold",
+              }}
             />
             <Line
               type="monotone"
               dataKey="Balance"
-              stroke="#8884d8"
+              stroke="var(--primary)"
               strokeWidth={2}
               dot={false}
             />

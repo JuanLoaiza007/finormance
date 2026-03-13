@@ -9,9 +9,11 @@ export function CalculatorHeader({ isFormExpanded, setIsFormExpanded }) {
       <div className="flex flex-col flex-1">
         <div className="flex items-center gap-2">
           <ChartNoAxesColumn className="[&_svg]:size-1 size-8 text-primary shrink-0" />
-          <h1 className="text-2xl font-bold leading-none">{APP_NAME}</h1>
+          <h1 className="text-2xl uppercase font-bold leading-none">
+            {APP_NAME}
+          </h1>
         </div>
-        <p className="text-[10px] uppercase tracking-wider font-bold text-foreground/70 mt-1">
+        <p className="text-[10px] uppercase tracking-widest font-bold text-foreground/70 mt-1">
           Simulador de rendimientos
         </p>
       </div>
