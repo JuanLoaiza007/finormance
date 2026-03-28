@@ -145,7 +145,7 @@ export function CalculatorForm({ className }) {
           <FormField label="Granularidad">
             <Select
               onValueChange={(val) => updateGlobalParam("granularity", val)}
-              defaultValue={globalParams.granularity}
+              value={globalParams.granularity}
             >
               <SelectTrigger className={inputClass}>
                 <SelectValue />
@@ -176,7 +176,7 @@ export function CalculatorForm({ className }) {
               onValueChange={(val) =>
                 updateGlobalParam("contributionTiming", val)
               }
-              defaultValue={globalParams.contributionTiming}
+              value={globalParams.contributionTiming}
             >
               <SelectTrigger className={inputClass}>
                 <SelectValue />
@@ -266,7 +266,7 @@ export function CalculatorForm({ className }) {
                     onValueChange={(val) =>
                       updateScenario(s.id, "payoutFreq", val)
                     }
-                    defaultValue={s.payoutFreq}
+                    value={s.payoutFreq}
                   >
                     <SelectTrigger className={cn(inputClass, "px-2")}>
                       <SelectValue>

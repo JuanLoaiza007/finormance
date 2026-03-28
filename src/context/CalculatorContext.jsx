@@ -57,12 +57,26 @@ export function CalculatorProvider({ children }) {
 
     if (savedGlobal) {
       try {
-        setGlobalParams(JSON.parse(savedGlobal));
+        const parsed = JSON.parse(savedGlobal);
+        if (parsed.contributionTiming === "start")
+          parsed.contributionTiming = "monthly_start";
+        if (parsed.contributionTiming === "end")
+          parsed.contributionTiming = "monthly_end";
+        if (!["daily", "monthly", "yearly"].includes(parsed.granularity))
+          parsed.granularity = "monthly";
+
+        setGlobalParams((prev) => ({ ...prev, ...parsed }));
       } catch (e) {}
     }
     if (savedScenarios) {
       try {
-        setScenarios(JSON.parse(savedScenarios));
+        const parsed = JSON.parse(savedScenarios).map((s) => ({
+          ...s,
+          payoutFreq: ["daily", "monthly", "yearly"].includes(s.payoutFreq)
+            ? s.payoutFreq
+            : "monthly",
+        }));
+        setScenarios(parsed);
       } catch (e) {}
     }
     setLoading(false);
