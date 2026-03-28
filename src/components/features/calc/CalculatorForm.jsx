@@ -153,6 +153,7 @@ export function CalculatorForm({ className }) {
               <SelectContent>
                 <SelectItem value="daily">Diaria</SelectItem>
                 <SelectItem value="monthly">Mensual</SelectItem>
+                <SelectItem value="yearly">Anual</SelectItem>
               </SelectContent>
             </Select>
           </FormField>
@@ -181,8 +182,10 @@ export function CalculatorForm({ className }) {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="start">Al inicio</SelectItem>
-                <SelectItem value="end">Al fin</SelectItem>
+                <SelectItem value="monthly_start">Mes Anticipado</SelectItem>
+                <SelectItem value="monthly_end">Mes Vencido</SelectItem>
+                <SelectItem value="yearly_start">Año Anticipado</SelectItem>
+                <SelectItem value="yearly_end">Año Vencido</SelectItem>
               </SelectContent>
             </Select>
           </FormField>
@@ -267,12 +270,17 @@ export function CalculatorForm({ className }) {
                   >
                     <SelectTrigger className={cn(inputClass, "px-2")}>
                       <SelectValue>
-                        {s.payoutFreq === "daily" ? "D" : "M"}
+                        {s.payoutFreq === "daily"
+                          ? "D"
+                          : s.payoutFreq === "monthly"
+                            ? "M"
+                            : "A"}
                       </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="daily">Diariamente</SelectItem>
                       <SelectItem value="monthly">Mensualmente</SelectItem>
+                      <SelectItem value="yearly">Anualmente</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormField>

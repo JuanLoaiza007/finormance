@@ -24,9 +24,12 @@ export const calculatorSchema = z.object({
     if (val === "" || val === undefined) return 0;
     return typeof val === "string" ? parseFloat(val) : val;
   }, z.number().nonnegative()),
-  contributionTiming: z.enum(["start", "end"], {
-    errorMap: () => ({ message: "Momento inválido" }),
-  }),
+  contributionTiming: z.enum(
+    ["monthly_start", "monthly_end", "yearly_start", "yearly_end"],
+    {
+      errorMap: () => ({ message: "Momento inválido" }),
+    }
+  ),
   periods: z.preprocess(
     (val) => (typeof val === "string" ? parseInt(val) : val),
     z
@@ -34,7 +37,7 @@ export const calculatorSchema = z.object({
       .int()
       .nonnegative({ message: "Períodos debe ser entero no negativo" })
   ),
-  granularity: z.enum(["daily", "monthly"], {
+  granularity: z.enum(["daily", "monthly", "yearly"], {
     errorMap: () => ({ message: "Granularidad inválida" }),
   }),
 });
@@ -45,7 +48,7 @@ export const initialCalculatorData = {
   rateType: "EA",
   nominalFreq: "12",
   extraContribution: "0",
-  contributionTiming: "end",
+  contributionTiming: "monthly_end",
   periods: "30",
-  granularity: "daily",
+  granularity: "monthly",
 };
