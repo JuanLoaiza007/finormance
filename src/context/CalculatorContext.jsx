@@ -57,12 +57,26 @@ export function CalculatorProvider({ children }) {
 
     if (savedGlobal) {
       try {
-        setGlobalParams(JSON.parse(savedGlobal));
+        const parsed = JSON.parse(savedGlobal);
+        if (parsed.contributionTiming === "start")
+          parsed.contributionTiming = "monthly_start";
+        if (parsed.contributionTiming === "end")
+          parsed.contributionTiming = "monthly_end";
+        if (!["daily", "monthly", "yearly"].includes(parsed.granularity))
+          parsed.granularity = "monthly";
+
+        setGlobalParams((prev) => ({ ...prev, ...parsed }));
       } catch (e) {}
     }
     if (savedScenarios) {
       try {
-        setScenarios(JSON.parse(savedScenarios));
+        const parsed = JSON.parse(savedScenarios).map((s) => ({
+          ...s,
+          payoutFreq: ["daily", "monthly", "yearly"].includes(s.payoutFreq)
+            ? s.payoutFreq
+            : "monthly",
+        }));
+        setScenarios(parsed);
       } catch (e) {}
     }
     setLoading(false);
@@ -98,30 +112,90 @@ export function CalculatorProvider({ children }) {
     const tea = computeEffectiveAnnual(rate, rateType, freq);
     const dailyRate = Math.pow(1 + tea, 1 / base) - 1;
     const monthlyRate = Math.pow(1 + tea, 1 / 12) - 1;
-    const r = granularity === "daily" ? dailyRate : monthlyRate;
+    const yearlyRate = tea;
 
+    const isYearlyGran = granularity === "yearly";
+    const isMonthlySurcharge = contributionTiming.startsWith("monthly");
+
+    let subSteps = 1;
+    let stepRate = 0;
+
+    if (granularity === "daily") {
+      stepRate = dailyRate;
+    } else if (granularity === "monthly") {
+      stepRate = monthlyRate;
+    } else if (granularity === "yearly") {
+      if (isMonthlySurcharge) {
+        subSteps = 12;
+        stepRate = monthlyRate;
+      } else {
+        stepRate = yearlyRate;
+      }
+    }
+
+    const totalSteps = per * subSteps;
     let balance = cap;
     let invested = cap;
     const entries = [];
+    let accumulatedInterest = 0;
 
-    for (let i = 1; i <= per; i++) {
-      let interestPeriod = 0;
-      if (contributionTiming === "start") {
+    for (let i = 1; i <= totalSteps; i++) {
+      let shouldAddStart = false;
+      let shouldAddEnd = false;
+
+      if (contributionTiming === "monthly_start") {
+        if (granularity === "daily") {
+          if ((i - 1) % 30 === 0) shouldAddStart = true;
+        } else {
+          shouldAddStart = true;
+        }
+      } else if (contributionTiming === "monthly_end") {
+        if (granularity === "daily") {
+          if (i % 30 === 0) shouldAddEnd = true;
+        } else {
+          shouldAddEnd = true;
+        }
+      } else if (contributionTiming === "yearly_start") {
+        if (granularity === "daily") {
+          if ((i - 1) % 365 === 0) shouldAddStart = true;
+        } else if (granularity === "monthly") {
+          if ((i - 1) % 12 === 0) shouldAddStart = true;
+        } else {
+          shouldAddStart = true;
+        }
+      } else if (contributionTiming === "yearly_end") {
+        if (granularity === "daily") {
+          if (i % 365 === 0) shouldAddEnd = true;
+        } else if (granularity === "monthly") {
+          if (i % 12 === 0) shouldAddEnd = true;
+        } else {
+          shouldAddEnd = true;
+        }
+      }
+
+      if (shouldAddStart) {
         balance += extra;
         invested += extra;
       }
-      interestPeriod = balance * r;
-      balance += interestPeriod;
-      if (contributionTiming === "end") {
+
+      const interestStep = balance * stepRate;
+      accumulatedInterest += interestStep;
+      balance += interestStep;
+
+      if (shouldAddEnd) {
         balance += extra;
         invested += extra;
       }
-      entries.push({
-        Period: i,
-        Balance: balance,
-        Invested: invested,
-        InterestPeriod: interestPeriod,
-      });
+
+      if (i % subSteps === 0) {
+        entries.push({
+          Period: i / subSteps,
+          Balance: balance,
+          Invested: invested,
+          InterestPeriod: accumulatedInterest,
+        });
+        accumulatedInterest = 0;
+      }
     }
     return entries;
   }, []);
@@ -186,7 +260,7 @@ export function CalculatorProvider({ children }) {
       id: s.id,
       name: s.name || "Escenario",
       color: s.color,
-      configLabel: `${s.rateValue}% ${s.rateType} | ${s.payoutFreq === "daily" ? "D" : "M"}`,
+      configLabel: `${s.rateValue}% ${s.rateType} | ${s.payoutFreq === "daily" ? "D" : s.payoutFreq === "monthly" ? "M" : "A"}`,
       schedule: calculateScenario(s, globalParams),
     }));
 

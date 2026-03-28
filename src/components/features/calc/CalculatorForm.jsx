@@ -145,7 +145,7 @@ export function CalculatorForm({ className }) {
           <FormField label="Granularidad">
             <Select
               onValueChange={(val) => updateGlobalParam("granularity", val)}
-              defaultValue={globalParams.granularity}
+              value={globalParams.granularity}
             >
               <SelectTrigger className={inputClass}>
                 <SelectValue />
@@ -153,6 +153,7 @@ export function CalculatorForm({ className }) {
               <SelectContent>
                 <SelectItem value="daily">Diaria</SelectItem>
                 <SelectItem value="monthly">Mensual</SelectItem>
+                <SelectItem value="yearly">Anual</SelectItem>
               </SelectContent>
             </Select>
           </FormField>
@@ -175,14 +176,16 @@ export function CalculatorForm({ className }) {
               onValueChange={(val) =>
                 updateGlobalParam("contributionTiming", val)
               }
-              defaultValue={globalParams.contributionTiming}
+              value={globalParams.contributionTiming}
             >
               <SelectTrigger className={inputClass}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="start">Al inicio</SelectItem>
-                <SelectItem value="end">Al fin</SelectItem>
+                <SelectItem value="monthly_start">Mes Anticipado</SelectItem>
+                <SelectItem value="monthly_end">Mes Vencido</SelectItem>
+                <SelectItem value="yearly_start">Año Anticipado</SelectItem>
+                <SelectItem value="yearly_end">Año Vencido</SelectItem>
               </SelectContent>
             </Select>
           </FormField>
@@ -263,16 +266,21 @@ export function CalculatorForm({ className }) {
                     onValueChange={(val) =>
                       updateScenario(s.id, "payoutFreq", val)
                     }
-                    defaultValue={s.payoutFreq}
+                    value={s.payoutFreq}
                   >
                     <SelectTrigger className={cn(inputClass, "px-2")}>
                       <SelectValue>
-                        {s.payoutFreq === "daily" ? "D" : "M"}
+                        {s.payoutFreq === "daily"
+                          ? "D"
+                          : s.payoutFreq === "monthly"
+                            ? "M"
+                            : "A"}
                       </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="daily">Diariamente</SelectItem>
                       <SelectItem value="monthly">Mensualmente</SelectItem>
+                      <SelectItem value="yearly">Anualmente</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormField>
